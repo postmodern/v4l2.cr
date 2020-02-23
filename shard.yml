@@ -1,0 +1,23 @@
+name: crystal-v4l2
+version: 0.1.0
+
+authors:
+  - Postmodern <postmodern.mod3@gmail.com>
+
+crystal: 0.33.0
+
+license: MIT
+
+libraries:
+  v4l2: ~> 0
+  v4l2rds: ~> 0
+  v4lconvert: ~> 0
+
+dependencies:
+  ioctl:
+    github: postmodern/ioctl.cr
+
+development_dependencies:
+  spectator:
+    gitlab: arctic-fox/spectator
+    version: ">= 0.9.9 and < 1.0.0"
