@@ -1035,7 +1035,7 @@ lib Linux
     audioset : U32
     tuner : U32
     std : V4L2StdID
-    status : U32
+    status : V4L2InputStatus
     capabilities : U32
     reserved : U32[3]
   end
@@ -1050,32 +1050,38 @@ lib Linux
   end
 
   #
-  # field 'status' - general 
+  # V4L2Input `status` field
   #
-  V4L2_IN_ST_NO_POWER  = 0x00000001  # Attached device is off
-  V4L2_IN_ST_NO_SIGNAL = 0x00000002
-  V4L2_IN_ST_NO_COLOR  = 0x00000004
+  @[Flags]
+  enum V4L2InputStatus : U32
+    #
+    # field 'status' - general
+    #
+    NO_POWER  = 0x00000001  # Attached device is off
+    NO_SIGNAL = 0x00000002
+    NO_COLOR  = 0x00000004
 
-  # field 'status' - sensor orientation
-  # If sensor is mounted upside down set both bits
-  V4L2_IN_ST_HFLIP = 0x00000010 # Frames are flipped horizontally
-  V4L2_IN_ST_VFLIP = 0x00000020 # Frames are flipped vertically
+    # field 'status' - sensor orientation
+    # If sensor is mounted upside down set both bits
+    HFLIP = 0x00000010 # Frames are flipped horizontally
+    VFLIP = 0x00000020 # Frames are flipped vertically
 
-  # field 'status' - analog
-  V4L2_IN_ST_NO_H_LOCK   = 0x00000100  # No horizontal sync lock
-  V4L2_IN_ST_COLOR_KILL  = 0x00000200  # Color killer is active
-  V4L2_IN_ST_NO_V_LOCK   = 0x00000400  # No vertical sync lock
-  V4L2_IN_ST_NO_STD_LOCK = 0x00000800  # No standard format lock
+    # field 'status' - analog
+    NO_H_LOCK   = 0x00000100  # No horizontal sync lock
+    COLOR_KILL  = 0x00000200  # Color killer is active
+    NO_V_LOCK   = 0x00000400  # No vertical sync lock
+    NO_STD_LOCK = 0x00000800  # No standard format lock
 
-  # field 'status' - digital
-  V4L2_IN_ST_NO_SYNC     = 0x00010000  # No synchronization lock
-  V4L2_IN_ST_NO_EQU      = 0x00020000  # No equalizer lock
-  V4L2_IN_ST_NO_CARRIER  = 0x00040000  # Carrier recovery failed
+    # field 'status' - digital
+    NO_SYNC     = 0x00010000  # No synchronization lock
+    NO_EQU      = 0x00020000  # No equalizer lock
+    NO_CARRIER  = 0x00040000  # Carrier recovery failed
 
-  # field 'status' - VCR and set-top box */
-  V4L2_IN_ST_MACROVISION = 0x01000000  # Macrovision detected
-  V4L2_IN_ST_NO_ACCESS   = 0x02000000  # Conditional access denied
-  V4L2_IN_ST_VTR         = 0x04000000  # VTR time constant
+    # field 'status' - VCR and set-top box */
+    MACROVISION = 0x01000000  # Macrovision detected
+    NO_ACCESS   = 0x02000000  # Conditional access denied
+    VTR         = 0x04000000  # VTR time constant
+  end
 
   # capabilities flags
   V4L2_IN_CAP_DV_TIMINGS     = 0x00000002 # Supports S_DV_TIMINGS
