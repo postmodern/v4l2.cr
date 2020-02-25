@@ -4,7 +4,9 @@ require "./v4l2-controls"
 
 # Four-character-code (FOURCC)
 macro v4l2_fourcc(a,b,c,d)
+  {% begin %}
   {{ a }}.ord.to_u32 | ({{ b }}.ord.to_u32 << 8) | ({{ c }}.ord.to_u32 << 16) | ({{ d }}.ord.to_u32 << 24)
+  {% end %}
 end
 
 macro v4l2_ctrl_id2class(id)
