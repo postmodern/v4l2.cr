@@ -23,7 +23,7 @@ lib Linux
   VIDEO_MAX_FRAME = 32
   VIDEO_MAX_PLANES = 8
 
-  enum V4L2Field
+  enum V4L2Field : U32
     ANY           = 0 # driver can choose from none,
                       #  top, bottom, interlaced
                       #  depending on whatever it thinks
@@ -129,7 +129,7 @@ lib Linux
     RF         = 5
   end
 
-  enum V4L2Memory
+  enum V4L2Memory : U32
     MMAP             = 1
     USER_PTR         = 2
     OVERLAY          = 3
@@ -137,7 +137,7 @@ lib Linux
   end
 
   # see also http://vektor.theorem.ca/graphics/ycbcr/
-  enum V4L2ColorSpace
+  enum V4L2ColorSpace : U32
     #
     # Default colorspace, i.e. let the driver figure it out.
     # Can only be used with video capture.
@@ -199,7 +199,7 @@ lib Linux
     end
   end
 
-  enum V4L2XFERFunc
+  enum V4L2XFERFunc : U32
     #
     # Mapping of Default to actual transfer functions
     # for the various colorspaces:
@@ -304,7 +304,7 @@ lib Linux
     HUE_MAP_256 = 129
   end
 
-  enum V4L2Quantization
+  enum V4L2Quantization : U32
     #
     # The default for R'G'B' quantization is always full range, except
     # for the BT2020 colorspace. For Y'CbCr the quantization is always
@@ -403,15 +403,15 @@ lib Linux
   struct V4L2PixFormat
     width, height : U32
     pixelformat : V4L2PixFormats
-    field : U32          # enum v4l2_field
+    field : V4L2Field
     bytesperline : U32   # for padding, zero if unused
     sizeimage : U32
-    colorspace : U32     # enum v4l2_colorspace
+    colorspace : V4L2ColorSpace
     priv : U32           # private data, depends on pixelformat
     flags : U32          # format flags (V4L2_PIX_FMT_FLAG_*)
     enc : V4L2PixFormatEnc
-    quality : U32        # enum v4l2_quantization
-    xfer_func : U32      # enum v4l2_xfer_func
+    quality : V4L2Quantization
+    xfer_func : V4L2XFERFunc
   end
 
   enum V4L2PixFormats : U32
@@ -432,7 +432,7 @@ lib Linux
 
   struct V4L2FmtDesc
     index : U32 # Format number
-    type : U32  # enum v4l2_buf_type
+    type : V4L2BufType
     flags : V4L2FmtFlags
     description : U8[32] # Description string
     pixelformat : V4L2PixFormats # Format fourcc
@@ -575,8 +575,8 @@ lib Linux
 
   struct V4L2RequestBuffers
     count : U32
-    type : U32   # enum v4l2_buf_type
-    memory : U32 # enum v4l2_memory
+    type : V4L2BufType
+    memory : V4L2Memory
     capabilities : V4L2BufCap
     reserved : U32[1]
   end
@@ -662,7 +662,7 @@ lib Linux
   end
 
   struct V4L2ExportBuffer
-    type : U32 # enum v4l2_buf_type
+    type : V4L2BufType
     index : U32
     plane : U32
     flags : V4L2BufFlags
@@ -673,10 +673,10 @@ lib Linux
   struct V4L2FrameBufferFmt
     width, height : U32
     pixelformat : V4L2PixFormats
-    field : U32        # enum v4l2_field
+    field : V4L2Field
     bytesperline : U32 # for padding, zero if unused
     sizeimage : U32
-    colorspace : U32   # enum v4l2_colorspace
+    colorspace : V4L2ColorSpace
     priv : U32         # eserved field, set to 0
   end
 
@@ -721,7 +721,7 @@ lib Linux
 
   struct V4L2Window
     w : V4L2Rect
-    field : U32 # enum v4l2_field
+    field : V4L2Field
     chromakey : U32
     clips : V4L2Clip *
     clipcount : U32
@@ -751,14 +751,14 @@ lib Linux
   end
 
   struct V4L2CropCap
-    type : U32 # enum v4l2_buf_type
+    type : V4L2BufType
     bounds : V4L2Rect
     defrect : V4L2Rect
     pixelaspect : V4L2Fract
   end
 
   struct V4L2Crop
-    tyep : U32 # enum v4l2_buf_type
+    tyep : V4L2BufType
     c : V4L2Rect
   end
 
@@ -1647,7 +1647,7 @@ lib Linux
   end
 
   struct V4L2Format
-    type : U32
+    type : V4L2BufType
     fmt : V4L2FormatUnion
   end
 
