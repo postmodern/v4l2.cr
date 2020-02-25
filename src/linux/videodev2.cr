@@ -1480,7 +1480,7 @@ lib Linux
     maximum : S32
     step : S32
     default_value : S32
-    flags : U32
+    flags : V4L2CtrlFlags
     reserved : U32[2]
   end
 
@@ -1493,7 +1493,7 @@ lib Linux
     maximum : S64
     step : U64
     default_value : S64
-    flags : U32
+    flags : V4L2CtrlFlags
     elem_size : U32
     elems : U32
     nr_of_dims : U32
@@ -1515,22 +1515,24 @@ lib Linux
     reserved : U32
   end
 
-  # Control flags
-  V4L2_CTRL_FLAG_DISABLED         = 0x0001
-  V4L2_CTRL_FLAG_GRABBED          = 0x0002
-  V4L2_CTRL_FLAG_READ_ONLY        = 0x0004
-  V4L2_CTRL_FLAG_UPDATE           = 0x0008
-  V4L2_CTRL_FLAG_INACTIVE         = 0x0010
-  V4L2_CTRL_FLAG_SLIDER           = 0x0020
-  V4L2_CTRL_FLAG_WRITE_ONLY       = 0x0040
-  V4L2_CTRL_FLAG_VOLATILE         = 0x0080
-  V4L2_CTRL_FLAG_HAS_PAYLOAD      = 0x0100
-  V4L2_CTRL_FLAG_EXECUTE_ON_WRITE = 0x0200
-  V4L2_CTRL_FLAG_MODIFY_LAYOUT    = 0x0400
+  @[Flags]
+  enum V4L2CtrlFlags : U32
+    DISABLED         = 0x0001
+    GRABBED          = 0x0002
+    READ_ONLY        = 0x0004
+    UPDATE           = 0x0008
+    INACTIVE         = 0x0010
+    SLIDER           = 0x0020
+    WRITE_ONLY       = 0x0040
+    VOLATILE         = 0x0080
+    HAS_PAYLOAD      = 0x0100
+    EXECUTE_ON_WRITE = 0x0200
+    MODIFY_LAYOUT    = 0x0400
 
-  # Query flags, to be ORed with the control ID
-  V4L2_CTRL_FLAG_NEXT_CTRL     = 0x80000000
-  V4L2_CTRL_FLAG_NEXT_COMPOUND = 0x40000000
+    # Query flags, to be ORed with the control ID
+    NEXT_CTRL     = 0x80000000
+    NEXT_COMPOUND = 0x40000000
+  end
 
   # User-class control IDs defined by V4L2
   V4L2_CID_MAX_CTRLS = 1024
