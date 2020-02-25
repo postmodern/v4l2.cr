@@ -1036,7 +1036,7 @@ lib Linux
     tuner : U32
     std : V4L2StdID
     status : V4L2InputStatus
-    capabilities : U32
+    capabilities : V4L2InputCap
     reserved : U32[3]
   end
 
@@ -1083,11 +1083,16 @@ lib Linux
     VTR         = 0x04000000  # VTR time constant
   end
 
-  # capabilities flags
-  V4L2_IN_CAP_DV_TIMINGS     = 0x00000002 # Supports S_DV_TIMINGS
-  V4L2_IN_CAP_CUSTOM_TIMINGS = V4L2_IN_CAP_DV_TIMINGS # For compatibility
-  V4L2_IN_CAP_STD            = 0x00000004 # Supports S_STD
-  V4L2_IN_CAP_NATIVE_SIZE    = 0x00000008 # Supports setting native size
+  #
+  # V4L2Input capabilities flags
+  #
+  @[Flags]
+  enum V4L2InputCap : U32
+    DV_TIMINGS     = 0x00000002 # Supports S_DV_TIMINGS
+    CUSTOM_TIMINGS = DV_TIMINGS # For compatibility
+    STD            = 0x00000004 # Supports S_STD
+    NATIVE_SIZE    = 0x00000008 # Supports setting native size
+  end
 
   struct V4L2Output
     index : U32           # Which output
