@@ -1669,14 +1669,17 @@ lib Linux
   struct V4L2Audio
     index : U32
     name : U8[32]
-    capability : U32
+    capability : V4L2AudioCap
     mode : U32
     reserved : U32[2]
   end
 
   # Flags for the 'capability' field
-  V4L2_AUDCAP_STEREO = 0x00001
-  V4L2_AUDCAP_AVL	   = 0x00002
+  @[Flags]
+  enum V4L2AudioCap
+    STEREO = 0x00001
+    AVL	   = 0x00002
+  end
 
   # Flags for the 'mode' field
   V4L2_AUDMODE_AVL = 0x00001
