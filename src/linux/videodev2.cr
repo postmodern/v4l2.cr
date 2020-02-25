@@ -1670,7 +1670,7 @@ lib Linux
     index : U32
     name : U8[32]
     capability : V4L2AudioCap
-    mode : U32
+    mode : V4L2AudioMode
     reserved : U32[2]
   end
 
@@ -1682,7 +1682,10 @@ lib Linux
   end
 
   # Flags for the 'mode' field
-  V4L2_AUDMODE_AVL = 0x00001
+  @[Flags]
+  enum V4L2AudioMode
+    AVL = 0x00001
+  end
 
   struct V4L2AudioOut
     index : U32
