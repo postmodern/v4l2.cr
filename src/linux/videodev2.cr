@@ -1618,18 +1618,20 @@ lib Linux
     reserved : U32[8]
   end
 
-  V4L2_BAND_MODULATION_VSB = (1 << 1)
-  V4L2_BAND_MODULATION_FM  = (1 << 2)
-  V4L2_BAND_MODULATION_AM  = (1 << 3)
+  enum V4L2BandModulation : U32
+    VSB = (1 << 1)
+    FM  = (1 << 2)
+    AM  = (1 << 3)
+  end
 
   struct V4L2FrequencyBand
     tuner : U32
     type : V4L2TunerType
     index : U32
-    capability : U32
+    capability : V4L2TunerCap
     rangelow : U32
     rangehigh : U32
-    mdulation : U32
+    mdulation : V4L2BandModulation
     reserved : U32[9]
   end
 
