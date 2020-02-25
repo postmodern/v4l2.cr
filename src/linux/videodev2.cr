@@ -9,6 +9,10 @@ macro v4l2_fourcc(a,b,c,d)
   {% end %}
 end
 
+macro v4l2_fourcc_be(a,b,c,d)
+  v4l2_fourcc({{ a }}, {{ b }}, {{ c }}, {{ d }}) | (1_u32 << 31)
+end
+
 macro v4l2_ctrl_id2class(id)
   (({{ id }}) & 0x0fff0000_u34)
 end
