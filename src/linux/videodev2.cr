@@ -604,7 +604,7 @@ lib Linux
 
   struct V4L2Buffer
     index : U32
-    type : U32
+    type : V4L2BufType
     bytesused : U32
     flags : U32
     field : U32
@@ -677,7 +677,7 @@ lib Linux
     bytesperline : U32 # for padding, zero if unused
     sizeimage : U32
     colorspace : V4L2ColorSpace
-    priv : U32         # eserved field, set to 0
+    priv : U32         # reserved field, set to 0
   end
 
   #  Flags for the 'capability' field. Read only
@@ -763,7 +763,7 @@ lib Linux
   end
 
   struct V4L2Selection
-    type : U32
+    type : V4L2BufType
     target : U32
     flags : U32
     r : V4L2Rect
@@ -973,11 +973,13 @@ lib Linux
 
   @[Packed]
   struct V4L2DVTimings
-    type : U32
+    type : V4L2DVTimingType
     union : V4L2DVTimingsUnion
   end
 
-  V4L2_DV_BT_656_1120 = 0 # BT.656/1120 timing type
+  enum V4L2DVTimingType : U32
+    BT_656_1120 = 0 # BT.656/1120 timing type
+  end
 
   struct V4L2EnumDVTimings
     index : U32
@@ -1017,7 +1019,7 @@ lib Linux
   end
 
   struct V4L2DVTimingsCap
-    type : U32
+    type : V4L2DVTimingType
     pad : U32
     reserved : U32[2]
     union : V4L2DVTimingsCapUnion
@@ -1026,7 +1028,7 @@ lib Linux
   struct V4L2Input
     index : U32
     name : U8[32]
-    type : U32
+    type : V4L2InputType
     audioset : U32
     tuner : U32
     std : V4L2StdID
@@ -1038,9 +1040,11 @@ lib Linux
   #
   # Values for the 'type' field
   #
-  V4L2_INPUT_TYPE_TUNER  = 1
-  V4L2_INPUT_TYPE_CAMERA = 2
-  V4L2_INPUT_TYPE_TOUCH	 = 3
+  enum V4L2InputType : U32
+    TUNER  = 1
+    CAMERA = 2
+    TOUCH  = 3
+  end
 
   #
   # field 'status' - general 
@@ -1077,26 +1081,31 @@ lib Linux
   V4L2_IN_CAP_NATIVE_SIZE    = 0x00000008 # Supports setting native size
 
   struct V4L2Output
-    index : U32        # Which output
-    name : U8[32]      # Label
-    type : U32         # Type of output
-    audioset : U32     #  Associated audios (bitfield)
-    modulator : U32    # Associated modulator
+    index : U32           # Which output
+    name : U8[32]         # Label
+    type : V4L2OutputType # Type of output
+    audioset : U32        #  Associated audios (bitfield)
+    modulator : U32       # Associated modulator
     std : V4L2StdID
-    capabilities : U32
+    capabilities : V4L2OutCap
     rserved : U32[3]
   end
 
   #  Values for the 'type' field
-  V4L2_OUTPUT_TYPE_MODULATOR        = 1
-  V4L2_OUTPUT_TYPE_ANALOG           = 2
-  V4L2_OUTPUT_TYPE_ANALOGVGAOVERLAY = 3
+  enum V4L2OutputType : U32
+    MODULATOR        = 1
+    ANALOG           = 2
+    ANALOGVGAOVERLAY = 3
+  end
 
   # capabilities flags */
-  V4L2_OUT_CAP_DV_TIMINGS     = 0x00000002 # Supports S_DV_TIMINGS
-  V4L2_OUT_CAP_CUSTOM_TIMINGS	= V4L2_OUT_CAP_DV_TIMINGS # For compatibility
-  V4L2_OUT_CAP_STD            = 0x00000004 # Supports S_STD
-  V4L2_OUT_CAP_NATIVE_SIZE    = 0x00000008 # Supports setting native size
+  @[Flags]
+  enum V4L2OutCap : U32
+    DV_TIMINGS     = 0x00000002 # Supports S_DV_TIMINGS
+    CUSTOM_TIMINGS = DV_TIMINGS # For compatibility
+    STD            = 0x00000004 # Supports S_STD
+    NATIVE_SIZE    = 0x00000008 # Supports setting native size
+  end
 
   struct V4L2Control
     id : U32
@@ -1174,7 +1183,7 @@ lib Linux
   # Used in the VIDIOC_QUERY_EXT_CTRL ioctl for querying extended controls
   struct V4L2QueryExtCtrl
     id : U32
-    type : U32
+    type : V4L2CtrlType
     name : Char[32]
     minimum : S64
     maximum : S64
@@ -1663,17 +1672,18 @@ lib Linux
   end
 
   #
-  # EVENTS
+  # Event Types
   #
-
-  V4L2_EVENT_ALL            = 0
-  V4L2_EVENT_VSYNC          = 1
-  V4L2_EVENT_EOS            = 2
-  V4L2_EVENT_CTRL           = 3
-  V4L2_EVENT_FRAME_SYNC     = 4
-  V4L2_EVENT_SOURCE_CHANGE  = 5
-  V4L2_EVENT_MOTION_DET     = 6
-  V4L2_EVENT_PRIVATE_START  = 0x08000000
+  enum V4L2EventType : U32
+    ALL            = 0
+    VSYNC          = 1
+    EOS            = 2
+    CTRL           = 3
+    FRAME_SYNC     = 4
+    SOURCE_CHANGE  = 5
+    MOTION_DET     = 6
+    PRIVATE_START  = 0x08000000
+  end
 
   # Payload for V4L2_EVENT_VSYNC
   @[Packed]
@@ -1694,7 +1704,7 @@ lib Linux
 
   struct V4L2EventCtrl
     changes : U32
-    type : U32
+    type : V4L2CtrlType
     union : V4L2EventCtrlUnion
     flags : U32
     minimum : S32
@@ -1731,7 +1741,7 @@ lib Linux
   end
 
   struct V4L2Event
-    type : U32
+    type : V4L2EventType
     union : V4L2EventUnion
     pending : U32
     sequence : U32
@@ -1744,7 +1754,7 @@ lib Linux
   V4L2_EVENT_SUB_FL_ALLOW_FEEDBACK = (1 << 1)
 
   struct V4L2EventSubscription
-    type : U32
+    type : V4L2EventType
     id : U32
     flags : U32
     reserved : U32[5]
@@ -1754,15 +1764,17 @@ lib Linux
   # ADVANCED DEBUGGING
   #
 
-  # VIDIOC_DBG_G_REGISTER and VIDIOC_DBG_S_REGISTER
-  V4L2_CHIP_MATCH_BRIDGE      = 0  # Match against chip ID on the bridge (0 for the bridge)
-  V4L2_CHIP_MATCH_SUBDEV      = 4  # Match against subdev index
+  enum V4L2ChipMatch : U32
+    # VIDIOC_DBG_G_REGISTER and VIDIOC_DBG_S_REGISTER
+    BRIDGE      = 0  # Match against chip ID on the bridge (0 for the bridge)
+    SUBDEV      = 4  # Match against subdev index
 
-  # The following four defines are no longer in use
-  V4L2_CHIP_MATCH_HOST        = V4L2_CHIP_MATCH_BRIDGE
-  V4L2_CHIP_MATCH_I2C_DRIVER  = 1  # Match against I2C driver name
-  V4L2_CHIP_MATCH_I2C_ADDR    = 2  # Match against I2C 7-bit address
-  V4L2_CHIP_MATCH_AC97        = 3  # Match against ancillary AC97 chip
+    # The following four defines are no longer in use
+    HOST        = BRIDGE
+    I2C_DRIVER  = 1  # Match against I2C driver name
+    I2C_ADDR    = 2  # Match against I2C 7-bit address
+    AC97        = 3  # Match against ancillary AC97 chip
+  end
 
   @[Packed]
   union V4L2DbgMatchUnion
@@ -1772,7 +1784,7 @@ lib Linux
 
   @[Packed]
   struct V4L2DbgMatch
-    type : U32                # Match type
+    type : V4L2ChipMatch      # Match type
     union : V4L2DbgMatchUnion # Match this chip, meaning determined by type
   end
 
