@@ -392,7 +392,7 @@ lib Linux
     bus_info : U8[32]
     version : U32
     capabilities : V4L2Cap
-    device_caps : U32
+    device_caps : V4L2Cap
     reserved : U32[3]
   end
 
