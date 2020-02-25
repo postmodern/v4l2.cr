@@ -4,7 +4,7 @@ require "./v4l2-controls"
 
 # Four-character-code (FOURCC)
 macro v4l2_fourcc(a,b,c,d)
-  {{ a }}.as(U32) | ({{ b }}.as(U32) << 8) | ({{ c }}.as(U32) << 16) | ({{ d }}.as(U32) << 24)
+  {{ a }}.ord.to_u32 | ({{ b }}.ord.to_u32 << 8) | ({{ c }}.ord.to_u32 << 16) | ({{ d }}.ord.to_u32 << 24)
 end
 
 macro v4l2_ctrl_id2class(id)
@@ -414,13 +414,16 @@ lib Linux
     xfer_func : V4L2XFERFunc
   end
 
-  enum V4L2PixFormats : U32
-    # priv field value to indicates that subsequent fields are valid.
-    PRIV_MAGIC = 0xfeedcafe
+  # TODO: copy in all v4l2_fourcc pixel formats
 
-    # Flags
-    FLAG_PREMUL_ALPHA = 0x00000001
+  enum V4L2PixFormats : U32
   end
+
+  # priv field value to indicates that subsequent fields are valid.
+  V4L2_PIX_FMT_PRIV_MAGIC = 0xfeedcafe
+
+  # Flags
+  V4L2_PIX_FMT_FLAG_PREMUL_ALPHA = 0x00000001
 
   @[Flags]
   enum V4L2FmtFlags : U32
