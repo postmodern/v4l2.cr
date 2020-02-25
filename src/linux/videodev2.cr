@@ -1023,20 +1023,27 @@ lib Linux
   end
 
   struct V4L2CaptureParm
-    capability : U32      # Supported modes
-    capturemode : U32     # Current mode
+    capability : V4L2StreamingParmCap # Supported modes
+    capturemode : V4L2CaptureParmFlags # Current mode
     timeperframe : V4L2Fract # Time per frame in seconds
     extendedmode : U32    # Driver-specific extensions
     readbuffers : U32     # # of buffers for read
     reserved : U32[4]
   end
 
-  V4L2_MODE_HIGHQUALITY = 0x0001_u32
-  V4L2_CAP_TIMEPERFRAME = 0x1000_u32
+  @[Flags]
+  enum V4L2StreamingParmCap : U32
+    TIMEPERFRAME = 0x1000
+  end
+
+  @[Flags]
+  enum V4L2CaptureParmFlags : U32
+    HIGHQUALITY = 0x0001
+  end
 
   struct V4L2OutputParm
-    capability : U32      # Supported modes
-    capturemode : U32     # Current mode
+    capability : V4L2StreamingParmCap # Supported modes
+    capturemode : V4L2CaptureParmFlags # Current mode
     timeperframe : V4L2Fract # Time per frame in seconds
     extendedmode : U32    # Driver-specific extensions
     readbuffers : U32     # # of buffers for read
