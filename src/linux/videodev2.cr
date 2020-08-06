@@ -982,7 +982,7 @@ lib Linux
     #
     # memory location
     #
-    memory : U32
+    memory : V4L2Memory
     m : V4L2BufferM
     length : U32
     reserved2 : U32
