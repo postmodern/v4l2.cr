@@ -2014,9 +2014,9 @@ lib Linux
   struct V4L2PixFormatMPlane
     width : U32
     height : U32
-    pixelformat : U32
+    pixelformat : V4L2PixFmt
     field : U32
-    colorspace : U32
+    colorspace : V4L2ColorSpace
     plane_fmt : V4L2PlanePixFormat[VIDEO_MAX_PLANES]
     num_planes : U8
     flags : U8
@@ -2028,7 +2028,7 @@ lib Linux
 
   @[Packed]
   struct V4L2SDRFormat
-    pixelformat : U32
+    pixelformat : V4L2PixFmt
     buffersize : U32
     reserved : U8[24]
   end
