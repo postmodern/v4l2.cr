@@ -810,7 +810,7 @@ lib Linux
   enum V4L2FrmSizeTypes : U32
     DISCRETE   = 1
     CONTINUOUS = 2
-    STEP_WISE  = 3
+    STEPWISE  = 3
   end
 
   struct V4L2FrmSizeDiscrete
