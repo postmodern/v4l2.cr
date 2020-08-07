@@ -1132,7 +1132,7 @@ lib Linux
   end
 
   struct V4L2Crop
-    tyep : V4L2BufType
+    type : V4L2BufType
     c : V4L2Rect
   end
 
