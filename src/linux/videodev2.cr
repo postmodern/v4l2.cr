@@ -2062,7 +2062,7 @@ lib Linux
   end
 
   struct V4L2StreamParm
-    tyep : V4L2BufType
+    type : V4L2BufType
     parm : V4L2StreamParmUnion
   end
 
