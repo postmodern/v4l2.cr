@@ -1641,7 +1641,7 @@ lib Linux
     capability : U32
     rangelow : U32
     rangehigh : U32
-    txsubchans : U32
+    txsubchans : V4L2TunerSub
     type : V4L2TunerType
     reserved : U32[3]
   end
