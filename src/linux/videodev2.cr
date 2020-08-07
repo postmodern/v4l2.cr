@@ -827,7 +827,7 @@ lib Linux
   struct V4L2FrmSizeStepWise
     min_width : U32   # Minimum frame width [pixel]
     max_width : U32   # Maximum frame width [pixel]
-    step_wdith : U32  # Frame width step size [pixel]
+    step_width : U32  # Frame width step size [pixel]
     min_height : U32  # Minimum frame height [pixel]
     max_height : U32  # Maximum frame height [pixel]
     step_height : U32 # Frame height step size [pixel]
