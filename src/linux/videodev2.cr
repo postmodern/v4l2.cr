@@ -833,7 +833,7 @@ lib Linux
     step_height : U32 # Frame height step size [pixel]
   end
 
-  union V4L2FrmSize
+  union V4L2FrmSizeUnion
     discrete : V4L2FrmSizeDiscrete
     stepwise : V4L2FrmSizeStepWise
   end
@@ -843,7 +843,7 @@ lib Linux
     pixel_format : U32 # Pixel format
     type : V4L2FrmSizeTypes # Frame size type the device supports.
 
-    frame_size : V4L2FrmSize # Frame size
+    frame_size : V4L2FrmSizeUnion # Frame size
 
     reserved : U32[2] # Reserved space for future use
   end
