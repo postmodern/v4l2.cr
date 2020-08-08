@@ -973,7 +973,7 @@ lib Linux
     index : U32
     type : V4L2BufType
     bytesused : U32
-    flags : U32
+    flags : V4L2BufFlags
     field : U32
     timestamp : LibC::Timeval
     timecode : V4L2TimeCode
