@@ -974,7 +974,7 @@ lib Linux
     type : V4L2BufType
     bytesused : U32
     flags : V4L2BufFlags
-    field : U32
+    field : V4L2Field
     timestamp : LibC::Timeval
     timecode : V4L2TimeCode
     sequence : U32
