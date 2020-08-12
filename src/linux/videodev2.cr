@@ -2015,7 +2015,7 @@ lib Linux
     width : U32
     height : U32
     pixelformat : V4L2PixFmt
-    field : U32
+    field : V4L2Field
     colorspace : V4L2ColorSpace
     plane_fmt : V4L2PlanePixFormat[VIDEO_MAX_PLANES]
     num_planes : U8
