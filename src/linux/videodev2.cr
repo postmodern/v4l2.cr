@@ -274,7 +274,7 @@ lib Linux
     end
   end
 
-  enum V4L2XFERFunc : U32
+  enum V4L2XFERFunc : U8
     #
     # Mapping of Default to actual transfer functions
     # for the various colorspaces:
