@@ -2006,8 +2006,8 @@ lib Linux
 
   @[Packed]
   union V4L2PixFormatMPlaneUnion
-    ycbcr_enc : U8
-    hsv_enc : U8
+    ycbcr_enc : V4L2YCBCREncoding
+    hsv_enc : V4L2HSVEncoding
   end
 
   @[Packed]
