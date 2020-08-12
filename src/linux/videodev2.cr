@@ -315,7 +315,7 @@ lib Linux
     end
   end
 
-  enum V4L2YCBCREncoding
+  enum V4L2YCBCREncoding : U8
     #
     # Mapping of DEFAULT to actual encodings for the
     # various colorspaces:
