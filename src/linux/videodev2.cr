@@ -204,6 +204,11 @@ lib Linux
       self == SDR_OUTPUT           ||
       self == META_OUTPUT
     end
+
+    @[AlwaysInline]
+    def is_overlay?
+      self == VIDEO_OVERLAY
+    end
   end
 
   enum V4L2TunerType
