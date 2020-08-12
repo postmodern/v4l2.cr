@@ -2022,7 +2022,7 @@ lib Linux
     flags : U8
     union : V4L2PixFormatMPlaneUnion
     quantization : V4L2Quantization
-    xfer_func : U8
+    xfer_func : V4L2XFERFunc
     reserved : U8[7]
   end
 
