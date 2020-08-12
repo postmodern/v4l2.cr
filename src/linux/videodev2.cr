@@ -371,7 +371,7 @@ lib Linux
     end
   end
 
-  enum V4L2HSVEncoding
+  enum V4L2HSVEncoding : U8
     # Hue mapped to 0 - 179
     HUE_MAP_180 = 128
 
