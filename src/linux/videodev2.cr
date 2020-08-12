@@ -209,6 +209,11 @@ lib Linux
     def is_overlay?
       self == VIDEO_OVERLAY
     end
+
+    @[AlwaysInline]
+    def is_vbi?
+      self == VBI_CAPTURE || self == VBI_OUTPUT
+    end
   end
 
   enum V4L2TunerType
