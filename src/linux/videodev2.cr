@@ -486,7 +486,7 @@ lib Linux
     flags : U32          # format flags (V4L2_PIX_FMT_FLAG_*)
     enc : V4L2PixFormatEnc
     quality : V4L2Quantization
-    xfer_func : V4L2XFERFunc
+    xfer_func : U32
   end
 end
 
