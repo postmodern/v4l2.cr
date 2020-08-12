@@ -184,6 +184,16 @@ lib Linux
     end
 
     @[AlwaysInline]
+    def is_capture?
+      self == VIDEO_CAPTURE        ||
+      self == VBI_CAPTURE          ||
+      self == SLICED_VBI_CAPTURE   ||
+      self == VIDEO_CAPTURE_MPLANE ||
+      self == SDR_CAPTURE          ||
+      self == META_CAPTURE
+    end
+
+    @[AlwaysInline]
     def is_output?
       self == VIDEO_OUTPUT         ||
       self == VIDEO_OUTPUT_MPLANE  ||
