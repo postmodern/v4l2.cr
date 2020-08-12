@@ -178,6 +178,11 @@ lib Linux
     PRIVATE              = 0x80
 
     @[AlwaysInline]
+    def is_video?
+      self == VIDEO_CAPTURE || self == VIDEO_OUTPUT
+    end
+
+    @[AlwaysInline]
     def is_multiplanar?
       self == VIDEO_CAPTURE_MPLANE ||
       self == VIDEO_OUTPUT_MPLANE
