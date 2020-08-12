@@ -229,6 +229,11 @@ lib Linux
     def is_sdr?
       self == SDR_CAPTURE || self == SDR_OUTPUT
     end
+
+    @[AlwaysInline]
+    def is_meta?
+      self == META_CAPTURE || self == META_OUTPUT
+    end
   end
 
   enum V4L2TunerType
