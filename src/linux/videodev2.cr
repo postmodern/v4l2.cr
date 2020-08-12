@@ -1917,8 +1917,7 @@ lib Linux
     # service_lines[1][...] specifies lines 0-23 (1-23 used) of the second field
     # (equals frame lines 313-336 for 625 line video standards, 263-286 for
     #  525 line standards)
-    service_line_0 : U16[24] # HACK: multi-dimension array
-    service_line_1 : U16[24] # HACK: multi-dimension array
+    service_lines : StaticArray(StaticArray(U16,24),2)
     io_size : U32
     reserved : U32[2] # must be zero
   end
