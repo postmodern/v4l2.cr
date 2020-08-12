@@ -1892,7 +1892,7 @@ lib Linux
     sampling_rate : U32    # in 1 Hz
     offset : U32
     samples_per_line : U32
-    sample_format : U32    # V4L2_PIX_FMT_
+    sample_format : V4L2PixFmt # V4L2_PIX_FMT_
     start : S32[2]
     count : U32[2]
     flags : V4L2VBIFlags   # V4L2_VBI_
