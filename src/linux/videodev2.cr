@@ -1895,13 +1895,15 @@ lib Linux
     sample_format : U32    # V4L2_PIX_FMT_
     start : S32[2]
     count : U32[2]
-    flags : U32            # V4L2_VBI_
+    flags : V4L2VBIFlags   # V4L2_VBI_
     reserved : U32[2]      # must be zero
   end
 
   # VBI flags
-  V4L2_VBI_UNSYNC     = (1 << 0)
-  V4L2_VBI_INTERLACED = (1 << 1)
+  enum V4L2VBIFlags : U32
+    UNSYNC     = (1 << 0)
+    INTERLACED = (1 << 1)
+  end
 
   # ITU-R start lines for each field
   V4L2_VBI_ITU_525_F1_START = 1
