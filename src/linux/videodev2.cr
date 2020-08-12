@@ -472,7 +472,8 @@ lib Linux
   end
 
   union V4L2PixFormatEnc
-    ycbcr, hsv : U32
+    ycbcr : V4L2YCBCREncoding
+    hsv : V4L2HSVEncoding
   end
 
   struct V4L2PixFormat
