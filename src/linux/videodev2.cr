@@ -214,6 +214,11 @@ lib Linux
     def is_vbi?
       self == VBI_CAPTURE || self == VBI_OUTPUT
     end
+
+    @[AlwaysInline]
+    def is_sliced_vbi?
+      self == SLICED_VBI_CAPTURE || self == SLICED_VBI_OUTPUT
+    end
   end
 
   enum V4L2TunerType
