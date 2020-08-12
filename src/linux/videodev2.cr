@@ -2021,7 +2021,7 @@ lib Linux
     num_planes : U8
     flags : U8
     union : V4L2PixFormatMPlaneUnion
-    quantization : U8
+    quantization : V4L2Quantization
     xfer_func : U8
     reserved : U8[7]
   end
