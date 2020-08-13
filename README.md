@@ -61,6 +61,7 @@ end
 ## TODO
 
 * Implement YUYV 422 pixel format support.
+* Write specs meant to be ran manually with a webcam.
 
 ## Contributing
 
