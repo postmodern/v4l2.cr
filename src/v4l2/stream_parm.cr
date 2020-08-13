@@ -1,5 +1,4 @@
 require "../linux/videodev2"
-require "./fract"
 
 module V4L2
   class StreamParm
