@@ -58,6 +58,8 @@ V4L2::Device.open("/dev/video0") do |device|
 end
 ```
 
+See [examples] for additional examples.
+
 ## TODO
 
 * Implement YUYV 422 pixel format support.
@@ -78,3 +80,4 @@ end
 
 [crystal]: https://crystal-lang.org/
 [v4l2]: https://www.kernel.org/doc/html/v4.9/media/uapi/v4l/v4l2.html
+[examples]: https://github.com/postmodern/v4l2.cr/tree/master/examples
