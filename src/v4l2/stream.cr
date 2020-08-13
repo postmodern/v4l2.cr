@@ -117,16 +117,12 @@ module V4L2
     end
 
     @[Raises(ArgumentError)]
-    def malloc_buffers!(count : Int32, length : Int32) : self
+    def malloc_buffers!(count : Int32, length : UInt32) : self
       if count < 0
         raise ArgumentError.new("count must not be negative")
       end
 
-      if length < 0
-        raise ArgumentError.new("length must not be negative")
-      end
-
-      malloc_buffers!(count.to_u32,length.to_u32)
+      malloc_buffers!(count.to_u32,length)
     end
 
     def start_capturing! : self

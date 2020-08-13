@@ -11,7 +11,7 @@ begin
     format = device.video_capture.format
     puts "Format: #{format.pixel_format} #{format.width}x#{format.height}"
 
-    device.video_capture.malloc_buffers!(4_u32, format.size_image)
+    device.video_capture.malloc_buffers!(4, format.size_image)
     device.video_capture.start_capturing!
     device.video_capture.stream_on!
 
