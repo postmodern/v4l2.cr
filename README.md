@@ -47,14 +47,11 @@ V4L2::Device.open("/dev/video0") do |device|
   puts "Format: #{format.pixel_format} #{format.width}x#{format.height}"
 
   device.video_capture.malloc_buffers!(4, format.size_image)
-  device.video_capture.start_capturing!
-  device.video_capture.stream_on!
-
-  device.video_capture.read_frame do |frame|
-    File.write("image.jpg",frame.bytes)
+  device.video_capture.capture! do
+    device.video_capture.read_frame do |frame|
+      File.write("image.jpg",frame.bytes)
+    end
   end
-
-  device.video_capture.stream_off!
 end
 ```
 

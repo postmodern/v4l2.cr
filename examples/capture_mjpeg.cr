@@ -12,16 +12,13 @@ begin
     puts "Format: #{format.pixel_format} #{format.width}x#{format.height}"
 
     device.video_capture.malloc_buffers!(4, format.size_image)
-    device.video_capture.start_capturing!
-    device.video_capture.stream_on!
-
-    30.times do |i|
-      device.video_capture.read_frame do |frame|
-        File.write("image-#{i}.jpg",frame.bytes)
+    device.video_capture.capture! do
+      30.times do |i|
+        device.video_capture.read_frame do |frame|
+          File.write("image-#{i}.jpg",frame.bytes)
+        end
       end
     end
-
-    device.video_capture.stream_off!
   end
 rescue error : V4L2::Error
   STDERR.puts error.message

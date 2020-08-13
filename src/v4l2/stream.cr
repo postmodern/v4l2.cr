@@ -120,6 +120,20 @@ module V4L2
       return self
     end
 
+    def stream_off! : self
+      @device.stream_off!(@type)
+      return self
+    end
+
+    def capture!
+      start_capturing!
+      stream_on!
+
+      yield
+
+      stream_off!
+    end
+
     def read_frame(&block : (Frame) ->)
       @device.wait_readable
 
@@ -129,11 +143,6 @@ module V4L2
 
         yield frame
       end
-    end
-
-    def stream_off! : self
-      @device.stream_off!(@type)
-      return self
     end
 
   end
