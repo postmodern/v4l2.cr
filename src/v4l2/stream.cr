@@ -107,24 +107,6 @@ module V4L2
       return self
     end
 
-    @[Raises(ArgumentError)]
-    def mmap_buffers!(count : Int32) : self
-      if count < 0
-        raise ArgumentError.new("count must not be negative")
-      end
-
-      mmap_buffers!(count.to_u32)
-    end
-
-    @[Raises(ArgumentError)]
-    def malloc_buffers!(count : Int32, length : UInt32) : self
-      if count < 0
-        raise ArgumentError.new("count must not be negative")
-      end
-
-      malloc_buffers!(count.to_u32,length)
-    end
-
     def start_capturing! : self
       buffers.each_with_index do |buffer,index|
         queue.enqueue(index.to_u32,buffer)
