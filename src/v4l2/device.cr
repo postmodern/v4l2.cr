@@ -222,7 +222,7 @@ module V4L2
     end
 
     @[Raises(IndexError, VIDIOCError)]
-    protected def query_buffer(buffer_ptr : Linux::V4L2Buffer *)
+    private def query_buffer(buffer_ptr : Linux::V4L2Buffer *)
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-querybuf.html#ioctl-vidioc-querybuf
       if ioctl_blocking(@fd, Linux::VIDIOC_QUERYBUF, buffer_ptr) == -1
         case Errno.value
@@ -240,7 +240,7 @@ module V4L2
     end
 
     @[Raises(VIDIOCError)]
-    protected def enqueue_buffer(buffer_ptr : Linux::V4L2Buffer *)
+    private def enqueue_buffer(buffer_ptr : Linux::V4L2Buffer *)
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-qbuf.html#ioctl-vidioc-qbuf-vidioc-dqbuf
       if ioctl_blocking(@fd, Linux::VIDIOC_QBUF, buffer_ptr) == -1
         raise VIDIOCError.new("VIDIOC_QBUF")
