@@ -24,10 +24,33 @@ WIP [Crystal][crystal] bindings for [libv4l2][v4l2].
 
 2. Run `shards install`
 
-## Usage
+## Examples
+
+Reading a single JPEG frame:
 
 ```crystal
 require "v4l2"
+
+V4L2::Device.open("/dev/video0") do |device|
+  device.video_capture.format do |format|
+    format.width = 640
+    format.height = 480
+    format.pixel_format = Linux::V4L2PixFmt::MJPEG
+  end
+
+  format = device.video_capture.format
+  puts "Format: #{format.pixel_format} #{format.width}x#{format.height}"
+
+  device.video_capture.malloc_buffers!(4_u32, format.size_image)
+  device.video_capture.start_capturing!
+  device.video_capture.stream_on!
+
+  device.video_capture.read_frame do |frame|
+    File.write("image.jpg",frame.bytes)
+  end
+
+  device.video_capture.stream_off!
+end
 ```
 
 ## TODO
