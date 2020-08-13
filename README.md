@@ -1,6 +1,6 @@
 # v4l2.cr
 
-WIP [Crystal][crystal] bindings for [V4L2][v4l2] (Video for Linux 2 API).
+[Crystal][crystal] bindings for [V4L2][v4l2] (Video for Linux 2 API).
 
 ## Requirements
 
