@@ -1,6 +1,6 @@
 # v4l2.cr
 
-WIP [Crystal][crystal] bindings for [libv4l2][v4l2].
+WIP [Crystal][crystal] bindings for [V4L2][v4l2] (Video for Linux 2 API).
 
 ## Requirements
 
@@ -75,4 +75,4 @@ end
 - [Postmodern](https://github.com/postmodern) - creator and maintainer
 
 [crystal]: https://crystal-lang.org/
-[v4l2]: https://linuxtv.org/downloads/v4l-dvb-apis/uapi/v4l/v4l2.html
+[v4l2]: https://www.kernel.org/doc/html/v4.9/media/uapi/v4l/v4l2.html
