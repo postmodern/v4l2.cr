@@ -4,7 +4,7 @@ version: 0.1.0
 authors:
   - Postmodern <postmodern.mod3@gmail.com>
 
-crystal: 0.33.0
+crystal: 0.35.1
 
 license: MIT
 
