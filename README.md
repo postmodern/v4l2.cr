@@ -32,8 +32,7 @@ require "v4l2"
 
 ## TODO
 
-* Implement wrapper classes for the various v4l2 ioctls.
-* Port a v4l2 example C program.
+* Implement YUYV 422 pixel format support.
 
 ## Contributing
 
