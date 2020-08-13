@@ -53,7 +53,7 @@ module V4L2
     end
 
     def format : FORMAT
-      FORMAT.new(@type).tap do |format|
+      FORMAT.new(@type) do |format|
         @device.get_format(format)
       end
     end
