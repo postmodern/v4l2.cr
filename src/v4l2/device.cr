@@ -106,15 +106,17 @@ module V4L2
     end
 
     @[Raises(VIDIOCError)]
-    def query_capability
-      # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-querycap.html#ioctl-vidioc-querycap
-      capability_struct = Linux::V4L2Capability.new
-
-      if ioctl_blocking(@fd, Linux::VIDIOC_QUERYCAP, pointerof(capability_struct)) == -1
+    private def query_cap(capability_ptr : Linux::V4L2Capability *)
+      if ioctl_blocking(@fd, Linux::VIDIOC_QUERYCAP, capability_ptr) == -1
         raise VIDIOCError.new("VIDIOC_QUERYCAP")
       end
+    end
 
-      return Capability.new(capability_struct)
+    def query_capability : Capability
+      # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-querycap.html#ioctl-vidioc-querycap
+      capability = Capability.new
+      query_cap(capability.to_unsafe)
+      return capability
     end
 
     @[Raises(VIDIOCError)]

@@ -5,8 +5,8 @@ module V4L2
 
     alias Cap = Linux::V4L2Cap
 
-    def initialize(capability : Linux::V4L2Capability)
-      @capability = capability
+    def initialize
+      @capability = Linux::V4L2Capability.new
     end
 
     delegate version, to: @capability
@@ -36,6 +36,10 @@ module V4L2
 
     def device_caps : Linux::V4L2Cap
       @capability.device_caps
+    end
+
+    def to_unsafe : Pointer(Linux::V4L2Capability)
+      pointerof(@capability)
     end
 
   end
