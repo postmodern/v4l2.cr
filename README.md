@@ -5,7 +5,7 @@
 ## Requirements
 
 * Linux
-* Crystal >= 0.35.1
+* [Crystal][crystal] >= 0.35.1
 
 ## Installation
 
