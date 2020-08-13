@@ -2,6 +2,11 @@
 
 WIP [Crystal][crystal] bindings for [libv4l2][v4l2].
 
+## Requirements
+
+* Linux
+* Crystal >= 0.35.1
+
 ## Installation
 
 1. Install the v4l2 libraries and headers:
