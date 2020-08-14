@@ -7,65 +7,6 @@ require "./allocated_buffer"
 module V4L2
   class Stream(TYPE,FORMAT)
 
-    module HasParm(PARM)
-      def parm : PARM
-        PARM.new.tap do |parm|
-          @device.get_parm(parm)
-        end
-      end
-
-      def parm=(new_parm : PARM)
-        @device.set_param(new_param)
-        return new_parm
-      end
-
-      def parm(&block : (PARM) ->)
-        parm = self.parm
-        yield parm
-        self.parm = parm
-      end
-    end
-
-    module Capture
-      def start_capturing! : self
-        buffers.each_with_index do |buffer,index|
-          queue.enqueue(index.to_u32,buffer)
-        end
-
-        return self
-      end
-
-      def stream_on! : self
-        @device.stream_on!(@type)
-        return self
-      end
-
-      def stream_off! : self
-        @device.stream_off!(@type)
-        return self
-      end
-
-      def capture!
-        start_capturing!
-        stream_on!
-
-        yield
-
-        stream_off!
-      end
-
-      def read_frame(&block : (Frame) ->)
-        @device.wait_readable
-
-        queue.dequeue do |buffer|
-          allocated_buffer = buffers[buffer.index]
-          frame            = Frame.new(buffer,allocated_buffer)
-
-          yield frame
-        end
-      end
-    end
-
     class UninitializedError < Error
     end
 
@@ -145,6 +86,65 @@ module V4L2
       end
 
       return self
+    end
+
+    module HasParm(PARM)
+      def parm : PARM
+        PARM.new.tap do |parm|
+          @device.get_parm(parm)
+        end
+      end
+
+      def parm=(new_parm : PARM)
+        @device.set_param(new_param)
+        return new_parm
+      end
+
+      def parm(&block : (PARM) ->)
+        parm = self.parm
+        yield parm
+        self.parm = parm
+      end
+    end
+
+    module Capture
+      def start_capturing! : self
+        buffers.each_with_index do |buffer,index|
+          queue.enqueue(index.to_u32,buffer)
+        end
+
+        return self
+      end
+
+      def stream_on! : self
+        @device.stream_on!(@type)
+        return self
+      end
+
+      def stream_off! : self
+        @device.stream_off!(@type)
+        return self
+      end
+
+      def capture!
+        start_capturing!
+        stream_on!
+
+        yield
+
+        stream_off!
+      end
+
+      def read_frame(&block : (Frame) ->)
+        @device.wait_readable
+
+        queue.dequeue do |buffer|
+          allocated_buffer = buffers[buffer.index]
+          frame            = Frame.new(buffer,allocated_buffer)
+
+          yield frame
+        end
+      end
     end
 
   end
