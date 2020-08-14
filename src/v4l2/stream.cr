@@ -26,6 +26,46 @@ module V4L2
       end
     end
 
+    module Capture
+      def start_capturing! : self
+        buffers.each_with_index do |buffer,index|
+          queue.enqueue(index.to_u32,buffer)
+        end
+
+        return self
+      end
+
+      def stream_on! : self
+        @device.stream_on!(@type)
+        return self
+      end
+
+      def stream_off! : self
+        @device.stream_off!(@type)
+        return self
+      end
+
+      def capture!
+        start_capturing!
+        stream_on!
+
+        yield
+
+        stream_off!
+      end
+
+      def read_frame(&block : (Frame) ->)
+        @device.wait_readable
+
+        queue.dequeue do |buffer|
+          allocated_buffer = buffers[buffer.index]
+          frame            = Frame.new(buffer,allocated_buffer)
+
+          yield frame
+        end
+      end
+    end
+
     class UninitializedError < Error
     end
 
@@ -105,44 +145,6 @@ module V4L2
       end
 
       return self
-    end
-
-    def start_capturing! : self
-      buffers.each_with_index do |buffer,index|
-        queue.enqueue(index.to_u32,buffer)
-      end
-
-      return self
-    end
-
-    def stream_on! : self
-      @device.stream_on!(@type)
-      return self
-    end
-
-    def stream_off! : self
-      @device.stream_off!(@type)
-      return self
-    end
-
-    def capture!
-      start_capturing!
-      stream_on!
-
-      yield
-
-      stream_off!
-    end
-
-    def read_frame(&block : (Frame) ->)
-      @device.wait_readable
-
-      queue.dequeue do |buffer|
-        allocated_buffer = buffers[buffer.index]
-        frame            = Frame.new(buffer,allocated_buffer)
-
-        yield frame
-      end
     end
 
   end
