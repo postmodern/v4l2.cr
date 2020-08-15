@@ -34,16 +34,11 @@ module V4L2
       delegate :capture_mode=, to: @struct.parm.capture
 
       def time_per_frame : Fract
-        Fract.new(
-          @struct.parm.capture.timeperframe.numerator,
-          @struct.parm.capture.timeperframe.denominator
-        )
+        Fract.new(@struct.parm.capture.timeperframe)
       end
 
       def time_per_frame=(new_fract : Fract)
-        @struct.parm.capture.timeperframe.numerator, 
-        @struct.parm.capture.timeperframe.denominator = new_fract.numerator,
-                                                        new_fract.denominator
+        @struct.parm.capture.timeperframe = new_fract.to_unsafe
       end
 
       delegate extended_mode, to: @struct.parm.capture
@@ -73,16 +68,11 @@ module V4L2
       delegate :capture_mode=, to: @struct.parm.output
 
       def time_per_frame : Fract
-        Fract.new(
-          @struct.parm.output.timeperframe.numerator,
-          @struct.parm.output.timeperframe.denominator
-        )
+        Fract.new(@struct.parm.output.timeperframe)
       end
 
       def time_per_frame=(new_fract : Fract)
-        @struct.parm.output.timeperframe.numerator, 
-        @struct.parm.output.timeperframe.denominator = new_fract.numerator,
-                                                       new_fract.denominator
+        @struct.parm.output.timeperframe = new_fract.to_unsafe
       end
 
       delegate extended_mode, to: @struct.parm.output
