@@ -13,6 +13,7 @@
 /capture_yuyv
 /settings
 /write_mjpeg
+/pipe_yuyv
 
 # Output files
 *.jpg
