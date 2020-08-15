@@ -882,6 +882,15 @@ module V4L2
       return @io.read(buffer)
     end
 
+    @[Raises(UnsupportedError)]
+    def write(buffer : Slice(UInt8))
+      unless @capability.capabilities.includes?(Capability::Cap::READWRITE)
+        raise UnsupportedCapability.new("writing directly from the device is not supported")
+      end
+
+      @io.write(buffer)
+    end
+
     def close
       @io.close
     end
