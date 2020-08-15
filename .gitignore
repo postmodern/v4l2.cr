@@ -10,6 +10,7 @@
 
 # Example programs
 /capture_mjpeg
+/capture_yuyv
 /settings
 /writing_mjpeg
 
