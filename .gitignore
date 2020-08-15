@@ -11,6 +11,7 @@
 # Example programs
 /capture_mjpeg
 /settings
+/writing_mjpeg
 
 # Output files
 *.jpg
