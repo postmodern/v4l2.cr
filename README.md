@@ -30,7 +30,7 @@ V4L2::Device.open("/dev/video0") do |device|
   device.video_capture.format do |format|
     format.width = 640
     format.height = 480
-    format.pixel_format = Linux::V4L2PixFmt::MJPEG
+    format.pixel_format = V4L2::PixFmt::MJPEG
   end
 
   format = device.video_capture.format
