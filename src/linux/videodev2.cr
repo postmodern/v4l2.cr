@@ -355,7 +355,7 @@ lib Linux
     end
   end
 
-  enum V4L2YCBCREncoding : U8
+  enum V4L2YCbCrEncoding : U8
     #
     # Mapping of DEFAULT to actual encodings for the
     # various colorspaces:
@@ -430,7 +430,7 @@ lib Linux
     LIM_RANGE  = 2
 
     @[AlwaysInline]
-    def self.default(is_rgb_or_hsv : Bool, colorspace : V4L2ColorSpace, ycbcr_enc : V4L2YCBCREncoding)
+    def self.default(is_rgb_or_hsv : Bool, colorspace : V4L2ColorSpace, ycbcr_enc : V4L2YCbCrEncoding)
       if is_rgb_or_hsv && colorspace == V4L2ColorSpace::BT2020
         LIM_RANGE
       elsif is_rgb_or_hsv && colorspace == V4L2ColorSpace::JPEG
@@ -512,7 +512,7 @@ lib Linux
   end
 
   union V4L2PixFormatEnc
-    ycbcr : V4L2YCBCREncoding
+    ycbcr : V4L2YCbCrEncoding
     hsv : V4L2HSVEncoding
   end
 
@@ -2048,7 +2048,7 @@ lib Linux
 
   @[Packed]
   union V4L2PixFormatMPlaneUnion
-    ycbcr_enc : V4L2YCBCREncoding
+    ycbcr_enc : V4L2YCbCrEncoding
     hsv_enc : V4L2HSVEncoding
   end
 
