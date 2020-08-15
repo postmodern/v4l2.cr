@@ -64,7 +64,7 @@ module V4L2
       @capability = query_capability
 
       @video_capture        = Streams::VideoCapture.new(self) if @capability.video_capture?
-      @video_output         = Streams::VideoOutput.new(self) if @capability.video_overlay?
+      @video_output         = Streams::VideoOutput.new(self) if @capability.video_output?
       @video_overlay        = Streams::VideoOverlay.new(self) if @capability.video_overlay?
       @vbi_capture          = Streams::VBICapture.new(self) if @capability.vbi_capture?
       @vbi_output           = Streams::VBIOutput.new(self) if @capability.vbi_output?
