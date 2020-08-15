@@ -17,6 +17,18 @@ module V4L2
       @pointer = buffer_ptr
     end
 
+    @struct : Linux::V4L2Buffer?
+
+    def initialize(type : Type, memory : Memory, index : UInt32)
+      buffer = Linux::V4L2Buffer.new
+      buffer.type   = type
+      buffer.memory = memory
+      buffer.index  = index
+
+      @struct  = buffer
+      @pointer = pointerof(buffer)
+    end
+
     @[AlwaysInline]
     def index : UInt32
       @pointer.value.index
