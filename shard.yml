@@ -8,10 +8,10 @@ crystal: 0.35.1
 
 license: MIT
 
-libraries:
-  v4l2: ~> 0
-  v4l2rds: ~> 0
-  v4lconvert: ~> 0
+# libraries:
+#   v4l2: ~> 0
+#   v4l2rds: ~> 0
+#   v4lconvert: ~> 0
 
 dependencies:
   ioctl:

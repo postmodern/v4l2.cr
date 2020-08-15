@@ -9,17 +9,7 @@
 
 ## Installation
 
-1. Install the v4l2 libraries and headers:
-
-  * Debian / Ubuntu
-
-         $ sudo apt install libv4l-dev
-
-   * RedHat / Fedora
-
-         $ sudo dnf install libv4l-devel
-
-2. Add the dependency to your `shard.yml`:
+1. Add the dependency to your `shard.yml`:
 
    ```yaml
    dependencies:
