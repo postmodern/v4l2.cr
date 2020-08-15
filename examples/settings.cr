@@ -1,7 +1,9 @@
 require "../src/v4l2"
 
+video = ARGV.fetch(0,"/dev/video0")
+
 begin
-  V4L2::Device.open("/dev/video0") do |device|
+  V4L2::Device.open(video) do |device|
     capability = device.capability
 
     puts
