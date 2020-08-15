@@ -1,4 +1,5 @@
 require "../linux/videodev2"
+require "./fract"
 
 module V4L2
   class StreamParm
@@ -32,8 +33,18 @@ module V4L2
       delegate capture_mode, to: @struct.parm.capture
       delegate :capture_mode=, to: @struct.parm.capture
 
-      delegate time_per_frame, to: @struct.parm.capture
-      delegate :time_per_frame=, to: @struct.parm.capture
+      def time_per_frame : Fract
+        Fract.new(
+          @struct.parm.capture.timeperframe.numerator,
+          @struct.parm.capture.timeperframe.denominator
+        )
+      end
+
+      def time_per_frame=(new_fract : Fract)
+        @struct.parm.capture.timeperframe.numerator, 
+        @struct.parm.capture.timeperframe.denominator = new_fract.numerator,
+                                                        new_fract.denominator
+      end
 
       delegate extended_mode, to: @struct.parm.capture
       delegate :extended_mode=, to: @struct.parm.capture
@@ -61,8 +72,18 @@ module V4L2
       delegate capture_mode, to: @struct.parm.output
       delegate :capture_mode=, to: @struct.parm.output
 
-      delegate time_per_frame, to: @struct.parm.output
-      delegate :time_per_frame=, to: @struct.parm.output
+      def time_per_frame : Fract
+        Fract.new(
+          @struct.parm.output.timeperframe.numerator,
+          @struct.parm.output.timeperframe.denominator
+        )
+      end
+
+      def time_per_frame=(new_fract : Fract)
+        @struct.parm.output.timeperframe.numerator, 
+        @struct.parm.output.timeperframe.denominator = new_fract.numerator,
+                                                       new_fract.denominator
+      end
 
       delegate extended_mode, to: @struct.parm.output
       delegate :extended_mode=, to: @struct.parm.output
