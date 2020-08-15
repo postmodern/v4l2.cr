@@ -12,7 +12,7 @@
 /capture_mjpeg
 /capture_yuyv
 /settings
-/writing_mjpeg
+/write_mjpeg
 
 # Output files
 *.jpg
