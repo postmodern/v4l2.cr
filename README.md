@@ -49,7 +49,6 @@ See [examples] for additional examples.
 
 ## TODO
 
-* Implement YUYV 422 pixel format support.
 * Document public API.
 * Write specs meant to be ran manually with a webcam.
 
