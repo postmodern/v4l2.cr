@@ -52,6 +52,7 @@ See [examples] for additional examples.
 * Add `CropCap` and `Crop` classes.
 * Document public API.
 * Write specs meant to be ran manually with a webcam.
+* Tag a 0.1.0 release.
 
 ## Contributing
 
