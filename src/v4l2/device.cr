@@ -411,7 +411,7 @@ module V4L2
     @[Raises(VIDIOCError, VIDIOCError)]
     def standard : Linux::V4L2StdID
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-g-std.html#ioctl-vidioc-g-std-vidioc-s-std
-      std_id = uninitialized Linux::V4L2StdID
+      std_id = Linux::V4L2StdID.new(0)
 
       if ioctl_blocking(@fd, Linux::VIDIOC_G_STD, pointerof(std_id)) == -1
         case Errno.value
@@ -470,7 +470,7 @@ module V4L2
     @[Raises(VIDIOCError)]
     def input : Int32
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-g-input.html
-      int = uninitialized LibC::Int
+      int = LibC::Int.new(0)
 
       if ioctl_blocking(@fd, Linux::VIDIOC_G_INPUT, pointerof(int)) == -1
         raise VIDIOCError.new("VIDIOC_G_INPUT")
@@ -560,7 +560,7 @@ module V4L2
     @[Raises(VIDIOCError)]
     def output : LibC::Int
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-g-output.html
-      int = uninitialized LibC::Int
+      int = LibC::Int.new(0)
 
       if ioctl_blocking(@fd, Linux::VIDIOC_G_OUTPUT, pointerof(int)) == -1
         case Errno.value
@@ -617,7 +617,7 @@ module V4L2
 
     def audio : Audio
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-g-audio.html
-      audio_struct = uninitialized Linux::V4L2Audio
+      audio_struct = Linux::V4L2Audio.new
 
       if ioctl_blocking(@fd, Linux::VIDIOC_G_AUDIO, pointerof(audio_struct)) == -1
         case Errno.value
@@ -827,7 +827,7 @@ module V4L2
     @[Raises(VIDIOCError)]
     def priority : Priority
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-g-priority.html
-      priority = uninitialized Priority
+      priority = Priority.new(0)
 
       if ioctl_blocking(@fd, Linux::VIDIOC_G_PRIORITY, pointerof(priority)) == -1
         raise VIDIOCError.new("VIDIOC_G_PRIORITY")
