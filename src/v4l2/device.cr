@@ -750,14 +750,14 @@ module V4L2
     end
 
     @[Raises(VIDIOCError)]
-    def frequency=(ars : NamedTuple(tuner: UInt32, type: Linux::V4L2TunerType, frequency: UInt32))
+    def frequency=(args : NamedTuple(tuner: UInt32, type: Linux::V4L2TunerType, frequency: UInt32))
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-g-frequency.html
-      frequency_struct = Linux::V4L2Frequency.new
-      frequency_struct.tuner     = tuner
-      frequency_struct.type      = type
-      frequency_struct.frequency = frequency
+      freq_struct = Linux::V4L2Frequency.new
+      freq_struct.tuner     = args[:tuner]
+      freq_struct.type      = args[:type]
+      freq_struct.frequency = args[:frequency]
 
-      if ioctl_blocking(@fd, Linux::VIDIOC_S_FREQUENCY, pointerof(new_freq)) == -1
+      if ioctl_blocking(@fd, Linux::VIDIOC_S_FREQUENCY, pointerof(freq_struct)) == -1
         case Errno.value
         when Errno::EINVAL
           raise VIDIOCError.new
@@ -766,7 +766,7 @@ module V4L2
         end
       end
 
-      return frequency_struct
+      return args
     end
 
     @[Raises(VIDIOCError)]
