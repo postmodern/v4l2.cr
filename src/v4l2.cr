@@ -10,7 +10,7 @@ module V4L2
   alias PixFmt = Linux::V4L2PixFmt
   alias ColorSpace = Linux::V4L2ColorSpace
   alias XFERFunc = Linux::V4L2XFERFunc
-  alias YCBCREncoding = Linux::V4L2YCBCREncoding
+  alias YCbCrEncoding = Linux::V4L2YCbCrEncoding
   alias HSVEncoding = Linux::V4L2HSVEncoding
   alias Quantization = Linux::V4L2Quantization
   alias Priority = Linux::V4L2Priority
