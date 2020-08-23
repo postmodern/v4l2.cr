@@ -1,4 +1,7 @@
 require "./format"
+require "./crop_capability"
+require "./crop"
+require "./rect"
 require "./stream_parm"
 require "./buffer"
 require "./buffer_queue"
@@ -46,6 +49,18 @@ module V4L2
 
     def format(&block : (FORMAT) ->)
       self.format = FORMAT.new(@type,&block)
+    end
+
+    def crop_capabilities : CropCapability
+      @device.crop_capabilities(@type)
+    end
+
+    def crop : Rect
+      @device.get_crop(@type).rect
+    end
+
+    def crop=(rect : Rect)
+      @device.set_crop(Crop.new(@type,rect))
     end
 
     @[Raises(NotImplementedError, ArgumentError)]

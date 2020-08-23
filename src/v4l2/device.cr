@@ -10,6 +10,8 @@ require "./input"
 require "./output"
 require "./audio"
 require "./audio_out"
+require "./crop_capability"
+require "./crop"
 require "./buffer"
 require "./streams"
 
@@ -768,39 +770,46 @@ module V4L2
     end
 
     @[Raises(VIDIOCError)]
-    def crop_capabilities(type : Buffer::Type)
+    private def crop_capabilities(crop_cap_ptr : Linux::V4L2CropCap *)
       # See https://linuxtv.org/downloads/v4l-dvb-apis-new/uapi/v4l/vidioc-cropcap.html#c.VIDIOC_CROPCAP
-      crop_cap_struct = Linux::V4L2CropCap.new
-      crop_cap_struct.type = type
-
-      if ioctl_blocking(@fd, Linux::VIDIOC_CROPCAP, pointerof(crop_cap_struct)) == -1
+      if ioctl_blocking(@fd, Linux::VIDIOC_CROPCAP, crop_cap_ptr) == -1
         raise VIDIOCError.new("VIDIOC_CROPCAP")
       end
+    end
 
-      return crop_cap_struct
+    protected def crop_capabilities(type : Buffer::Type)
+      # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-cropcap.html#vidioc-cropcap
+      crop_cap = CropCapability.new(type)
+
+      crop_capabilities(crop_cap.to_unsafe)
+      return crop_cap
     end
 
     @[Raises(VIDIOCError)]
-    def crop(type : Buffer::Type) : Linux::V4L2Crop
-      # See https://linuxtv.org/downloads/v4l-dvb-apis-new/uapi/v4l/vidioc-g-crop.html#c.VIDIOC_G_CROP
-      crop_struct = Linux::V4L2Crop.new
-      crop_struct.type = type
-
-      if ioctl_blocking(@fd, Linux::VIDIOC_G_CROP, pointerof(crop_struct)) == -1
+    private def get_crop(crop_ptr : Linux::V4L2Crop *)
+      # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-g-crop.html#vidioc-g-crop
+      if ioctl_blocking(@fd, Linux::VIDIOC_G_CROP, crop_ptr) == -1
         raise VIDIOCError.new("Linux::VIDIOC_G_CROP")
       end
+    end
 
-      return crop_struct
+    protected def get_crop(type : Buffer::Type) : Crop
+      crop = Crop.new(type)
+
+      get_crop(crop.to_unsafe)
+      return crop
     end
 
     @[Raises(VIDIOCError)]
-    def crop=(new_crop : Linux::V4L2Crop)
+    private def set_crop(new_crop_ptr : Linux::V4L2Crop *)
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-g-crop.html
-      if ioctl_blocking(@fd, Linux::VIDIOC_S_CROP, pointerof(new_crop)) == -1
+      if ioctl_blocking(@fd, Linux::VIDIOC_S_CROP, new_crop_ptr) == -1
         raise VIDIOCError.new("Linux::VIDIOC_S_CROP")
       end
+    end
 
-      return new_crop
+    protected def set_crop(new_crop : Crop)
+      set_crop(new_crop.to_unsafe)
     end
 
     @[Raises(VIDIOCError)]

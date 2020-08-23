@@ -44,6 +44,17 @@ begin
     format = device.video_capture.format
     puts "Format: #{format.pixel_format} #{format.width}x#{format.height}"
 
+    puts "Crop Capability:"
+    device.video_capture.crop_capabilities.tap do |crop_cap|
+      puts "  Bounds: #{crop_cap.bounds}"
+      puts "  Defrect: #{crop_cap.defrect}"
+      puts "  Pixel Aspect: #{crop_cap.pixel_aspect}"
+
+      # reset the crop
+      # device.video_capture.crop = crop_cap.defrect
+    end
+    # puts "Crop: #{device.video_capture.crop}"
+
     puts "Input: #{device.input}"
     puts "Inputs:"
     device.each_input do |input|
