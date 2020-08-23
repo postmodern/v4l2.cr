@@ -839,9 +839,7 @@ module V4L2
     @[Raises(VIDIOCError)]
     def priority=(new_priority : Priority) : Priority
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-g-priority.html
-      priority = SYMBOL_TO_PRIORITY[new_priority]
-
-      if ioctl_blocking(@fd, Linux::VIDIOC_S_PRIORITY, pointerof(priority)) == -1
+      if ioctl_blocking(@fd, Linux::VIDIOC_S_PRIORITY, pointerof(new_priority)) == -1
         raise VIDIOCError.new("VIDIOC_G_PRIORITY")
       end
 
