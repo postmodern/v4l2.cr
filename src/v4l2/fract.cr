@@ -7,11 +7,11 @@ module V4L2
       initialize(fract_struct.numerator,fract_struct.denominator)
     end
 
-    def to_f
+    def to_f : Float
       numerator.to_f / denominator.to_f
     end
 
-    def to_s
+    def to_s : String
       "#{numerator}/#{denominator}"
     end
 

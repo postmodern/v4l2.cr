@@ -30,15 +30,15 @@ module V4L2
       @buffer[index]
     end
 
-    def bytes
+    def bytes : Slice(UInt8)
       @data
     end
 
-    def to_slice
+    def to_slice : Slice(UInt8)
       @data
     end
 
-    def to_unsafe
+    def to_unsafe : Pointer(UInt8)
       @data.to_unsafe
     end
 

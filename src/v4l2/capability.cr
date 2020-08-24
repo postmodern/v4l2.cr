@@ -6,12 +6,12 @@ module V4L2
     alias Cap = Linux::V4L2Cap
 
     def initialize
-      @capability = Linux::V4L2Capability.new
+      @struct = Linux::V4L2Capability.new
     end
 
-    delegate version, to: @capability
+    delegate version, to: @struct
 
-    delegate capabilities, to: @capability
+    delegate capabilities, to: @struct
 
     {% for cap in Cap.constants %}
       {% begin %}
@@ -22,24 +22,22 @@ module V4L2
       {% end %}
     {% end %}
 
-    def driver
-      String.new(@capability.driver.to_slice)
+    def driver : String
+      String.new(@struct.driver.to_slice)
     end
 
-    def card
-      String.new(@capability.card.to_slice)
+    def card : String
+      String.new(@struct.card.to_slice)
     end
 
     def device_caps?
-      @capability.capabilities.includes?(Linux::V4L2Cap::DEVICE_CAPS)
+      @struct.capabilities.includes?(Linux::V4L2Cap::DEVICE_CAPS)
     end
 
-    def device_caps : Linux::V4L2Cap
-      @capability.device_caps
-    end
+    delegate device_caps, to: @struct
 
     def to_unsafe : Pointer(Linux::V4L2Capability)
-      pointerof(@capability)
+      pointerof(@struct)
     end
 
   end

@@ -19,7 +19,7 @@ module V4L2
         initialize(discrete_struct.width, discrete_struct.height)
       end
 
-      def to_s
+      def to_s : String
         "#{width}x#{height}"
       end
 
@@ -36,7 +36,7 @@ module V4L2
         )
       end
 
-      def to_s
+      def to_s : String
         "#{min_width}x#{min_height} - #{max_width}x#{max_height} step #{step_width}/#{step_height}"
       end
 
