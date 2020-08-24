@@ -1,6 +1,9 @@
 require "../linux/videodev2"
 
 module V4L2
+  #
+  # Represents a "buffer" which the V4L2 kernel API controls.
+  #
   class Buffer
 
     alias Type = Linux::V4L2BufType
@@ -13,12 +16,18 @@ module V4L2
 
     alias Cap = Linux::V4L2BufCap
 
+    #
+    # Initializes the buffer from a pointer to a Linux::V4L2Buffer struct.
+    #
     def initialize(buffer_ptr : Linux::V4L2Buffer *)
       @pointer = buffer_ptr
     end
 
     @struct : Linux::V4L2Buffer?
 
+    #
+    # Initializes a new buffer of the given type, memory type, and index.
+    #
     def initialize(type : Type, memory : Memory, index : UInt32)
       buffer = Linux::V4L2Buffer.new
       buffer.type   = type

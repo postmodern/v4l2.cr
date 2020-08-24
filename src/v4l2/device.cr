@@ -104,6 +104,9 @@ module V4L2
     {% for buffer_type in Buffer::Type.constants %}
       {% unless buffer_type.id == "PRIVATE" %}
         {% begin %}
+          #
+          # The `{{ buffer_type.id }}` stream.
+          #
           @[Raises(UnsupportedCapability)]
           def {{ buffer_type.id.downcase }}
             @{{ buffer_type.id.downcase }} || \
