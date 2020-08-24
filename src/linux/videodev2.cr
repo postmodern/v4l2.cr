@@ -1712,7 +1712,7 @@ lib Linux
   # Flags for the 'rxsubchans' field
   #
   @[Flags]
-  enum V4L2TunerSub
+  enum V4L2TunerSub : U32
     MONO   = 0x0001
     STEREO = 0x0002
     LANG2  = 0x0004
