@@ -918,6 +918,10 @@ module V4L2
       @io.close
     end
 
+    def closed? : Bool
+      @io.closed?
+    end
+
     def to_unsafe : Int32
       @fd
     end
