@@ -1,5 +1,5 @@
 require "./videodev2"
-require "./media-buf-format"
+require "./media-bus-format"
 
 lib Linux
   struct V4L2MBusFrameFmt
