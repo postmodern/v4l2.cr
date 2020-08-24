@@ -15,7 +15,7 @@ module V4L2
     delegate id, to: @struct
 
     def name : String
-      String.new(@struct.name)
+      String.new(@struct.name.to_slice)
     end
 
     def frameperiod : Fract
