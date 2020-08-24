@@ -7,8 +7,8 @@ begin
     capability = device.capability
 
     puts
-    puts "Driver:\t#{String.new(capability.driver.to_slice)}"
-    puts "Card:\t#{String.new(capability.card.to_unsafe)}"
+    puts "Driver:\t#{capability.driver}"
+    puts "Card:\t#{capability.card}"
     puts "Capabilities:\t#{capability.capabilities}"
     puts "Device Caps:\t#{capability.device_caps}"
 
