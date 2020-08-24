@@ -11,6 +11,7 @@ require "./output"
 require "./audio"
 require "./audio_out"
 require "./modulator"
+require "./frequency"
 require "./crop_capability"
 require "./crop"
 require "./buffer"
@@ -745,12 +746,9 @@ module V4L2
     end
 
     @[Raises(VIDIOCError)]
-    def frequency(tuner : UInt32)
+    private def get_frequency(frequency_ptr : Linux::V4L2Frequency *)
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-g-frequency.html
-      frequency_struct = Linux::V4L2Frequency.new
-      frequency_struct.tuner = tuner
-
-      if ioctl_blocking(@fd, Linux::VIDIOC_G_FREQUENCY, pointerof(frequency_struct)) == -1
+      if ioctl_blocking(@fd, Linux::VIDIOC_G_FREQUENCY, frequency_ptr) == -1
         case Errno.value
         when Errno::EINVAL
           raise VIDIOCError.new
@@ -758,19 +756,19 @@ module V4L2
           raise VIDIOCError.new("VIDIOC_G_FREQUENCY")
         end
       end
+    end
 
-      return frequency_struct
+    def frequency(tuner : UInt32)
+      frequency = Frequency.new(tuner)
+
+      get_frequency(frequency.to_unsafe)
+      return frequency
     end
 
     @[Raises(VIDIOCError)]
-    def frequency=(args : NamedTuple(tuner: UInt32, type: Linux::V4L2TunerType, frequency: UInt32))
+    private def set_frequency(frequency_ptr : Linux::V4L2Frequency *)
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-g-frequency.html
-      freq_struct = Linux::V4L2Frequency.new
-      freq_struct.tuner     = args[:tuner]
-      freq_struct.type      = args[:type]
-      freq_struct.frequency = args[:frequency]
-
-      if ioctl_blocking(@fd, Linux::VIDIOC_S_FREQUENCY, pointerof(freq_struct)) == -1
+      if ioctl_blocking(@fd, Linux::VIDIOC_S_FREQUENCY, frequency_ptr) == -1
         case Errno.value
         when Errno::EINVAL
           raise VIDIOCError.new
@@ -780,6 +778,11 @@ module V4L2
       end
 
       return args
+    end
+
+    def frequency=(frequency : Frequency)
+      set_frequency(frequency.to_unsafe)
+      return frequency
     end
 
     @[Raises(VIDIOCError)]
