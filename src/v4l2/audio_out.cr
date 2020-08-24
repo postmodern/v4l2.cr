@@ -1,21 +1,25 @@
 module V4L2
   class AudioOut
 
-    def initialize(@audio : Linux::V4L2AudioOut)
+    def initialize
+      @struct = Linux::V4L2AudioOut.new
     end
 
-    delegate index, to: @audio
+    def initialize(@struct : Linux::V4L2AudioOut)
+    end
+
+    delegate index, to: @struct
 
     def name
-      String.new(@audio.name.to_slice)
+      String.new(@struct.name.to_slice)
     end
 
-    delegate capability, to: @audio
+    delegate capability, to: @struct
 
-    delegate mode, to: @audio
+    delegate mode, to: @struct
 
-    def to_unsafe
-      pointerof(@audio)
+    def to_unsafe : Pointer(Linux::V4L2AudioOut)
+      pointerof(@struct)
     end
 
   end

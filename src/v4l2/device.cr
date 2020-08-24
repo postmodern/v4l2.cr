@@ -408,10 +408,12 @@ module V4L2
       set_parm(new_parm.to_unsafe)
     end
 
+    alias StandardID = Linux::V4L2StdID
+
     @[Raises(VIDIOCError, VIDIOCError)]
-    def standard : Linux::V4L2StdID
+    def standard : StandardID
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-g-std.html#ioctl-vidioc-g-std-vidioc-s-std
-      std_id = Linux::V4L2StdID.new(0)
+      std_id = StandardID.new(0)
 
       if ioctl_blocking(@fd, Linux::VIDIOC_G_STD, pointerof(std_id)) == -1
         case Errno.value
@@ -426,7 +428,7 @@ module V4L2
     end
 
     @[Raises(VIDIOCError)]
-    def standard=(new_std_id)
+    def standard=(new_std_id : StandardID)
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-g-std.html#ioctl-vidioc-g-std-vidioc-s-std
       if ioctl_blocking(@fd, Linux::VIDIOC_S_STD, pointerof(new_std_id)) == -1
         case Errno.value
@@ -615,11 +617,10 @@ module V4L2
       return self
     end
 
-    def audio : Audio
+    @[Raises(VIDIOCError)]
+    private def get_audio(audio_ptr : Linux::V4L2Audio *)
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-g-audio.html
-      audio_struct = Linux::V4L2Audio.new
-
-      if ioctl_blocking(@fd, Linux::VIDIOC_G_AUDIO, pointerof(audio_struct)) == -1
+      if ioctl_blocking(@fd, Linux::VIDIOC_G_AUDIO, audio_ptr) == -1
         case Errno.value
         when Errno::EINVAL
           raise VIDIOCError.new
@@ -627,13 +628,19 @@ module V4L2
           raise VIDIOCError.new("VIDIOC_G_AUDIO")
         end
       end
-
-      return Audio.new(audio_struct)
     end
 
-    def audio=(new_audio)
+    def audio : Audio
+      audio = Audio.new
+
+      get_audio(audio.to_unsafe)
+      return audio
+    end
+
+    @[Raises(VIDIOCError)]
+    private def set_audio(audio_ptr : Linux::V4L2Audio *)
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-g-audio.html
-      if ioctl_blocking(@fd, Linux::VIDIOC_S_AUDIO, pointerof(new_audio)) == -1
+      if ioctl_blocking(@fd, Linux::VIDIOC_S_AUDIO, audio_ptr) == -1
         case Errno.value
         when Errno::EINVAL
           raise VIDIOCError.new
@@ -641,7 +648,10 @@ module V4L2
           raise VIDIOCError.new("VIDIOC_S_AUDIO")
         end
       end
+    end
 
+    def audio=(new_audio : Audio)
+      set_audio(new_audio.to_unsafe)
       return new_audio
     end
 
