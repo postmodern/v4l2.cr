@@ -10,6 +10,7 @@ require "./input"
 require "./output"
 require "./audio"
 require "./audio_out"
+require "./modulator"
 require "./crop_capability"
 require "./crop"
 require "./buffer"
@@ -705,12 +706,9 @@ module V4L2
     end
 
     @[Raises(VIDIOCError, IndexError)]
-    def modulator(index : UInt32 = 0) : Linux::V4L2Modulator
+    private def get_modulator(modulator_ptr : Linux::V4L2Modulator *)
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-g-modulator.html
-      modulator_struct = Linux::V4L2Modulator.new
-      modulator_struct.index = index
-
-      if ioctl_blocking(@fd, Linux::VIDIOC_G_MODULATOR, pointerof(modulator_struct)) == -1
+      if ioctl_blocking(@fd, Linux::VIDIOC_G_MODULATOR, modulator_ptr) == -1
         case Errno.value
         when Errno::EINVAL
           raise IndexError.new
@@ -718,18 +716,20 @@ module V4L2
           raise VIDIOCError.new("VIDIOC_G_MODULATOR")
         end
       end
+    end
 
-      return modulator_struct
+    def modulator(index : UInt32 = 0) : Modulator
+      modulator = Modulator.new(index)
+      modulator_struct.index = index
+
+      get_modulator(modulator.to_unsafe)
+      return modulator
     end
 
     @[Raises(VIDIOCError)]
-    def modulator=(args : NamedTupe(index: UInt32, txchains: Linux::V4L2TunerSub))
+    private def set_modulator(modulator_ptr : Linux::V4L2Modulator *)
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-g-modulator.html
-      modulator_struct = Linux::V4L2Modulator.new
-      modulator_struct.index = args[:index]
-      modulator_struct.txchains = args[:txchains]
-
-      if ioctl_blocking(@fd, Linux::VIDIOC_S_MODULATOR, pointerof(modulator_struct)) == -1
+      if ioctl_blocking(@fd, Linux::VIDIOC_S_MODULATOR, modulator_ptr) == -1
         case Errno.value
         when Errno::EINVAL
           raise IndexError.new
@@ -737,8 +737,11 @@ module V4L2
           raise VIDIOCError.new("VIDIOC_S_MODULATOR")
         end
       end
+    end
 
-      return modulator_struct
+    def modulator=(modulator : Modulator)
+      set_modulator(modulator.to_unsafe)
+      return modulator
     end
 
     @[Raises(VIDIOCError)]
