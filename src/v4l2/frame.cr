@@ -18,8 +18,8 @@ module V4L2
     # Initializes the video frame. The buffer represents the buffer metadata
     # and the slice represents where the data was read into.
     #
-    def initialize(@buffer : Buffer, slice : Slice(UInt8))
-      @data = slice[0,buffer.bytes_used]
+    def initialize(@buffer : Buffer, data : Slice(UInt8))
+      @data = data[0,@buffer.bytes_used]
     end
 
     #
