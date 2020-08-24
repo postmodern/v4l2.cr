@@ -29,40 +29,18 @@ module V4L2
       @pointer = pointerof(buffer)
     end
 
-    @[AlwaysInline]
-    def index : UInt32
-      @pointer.value.index
-    end
-
-    @[AlwaysInline]
-    def type : Type
-      @pointer.value.type
-    end
+    delegate index, to: @pointer.value
+    delegate type, to: @pointer.value
 
     @[AlwaysInline]
     def bytes_used
       @pointer.value.bytesused
     end
 
-    @[AlwaysInline]
-    def flags : Flags
-      @pointer.value.flags
-    end
-
-    @[AlwaysInline]
-    def field : Field
-      @pointer.value.field
-    end
-
-    @[AlwaysInline]
-    def memory : Memory
-      @pointer.value.memory
-    end
-
-    @[AlwaysInline]
-    def length
-      @pointer.value.length
-    end
+    delegate flags, to: @pointer.value
+    delegate field, to: @pointer.value
+    delegate memory, to: @pointer.value
+    delegate length, to: @pointer.value
 
     def offset : UInt32
       unless memory == Memory::MMAP
@@ -95,13 +73,9 @@ module V4L2
       @pointer.value.m.fd
     end
 
-    @[AlwaysInline]
-    def requested_fd : Int32
-      @pointer.value.requested_fd
-    end
+    delegate requested_fd, to: @pointer.value
 
-    @[AlwaysInline]
-    def to_unsafe : Linux::V4L2Buffer *
+    def to_unsafe : Pointer(Linux::V4L2Buffer)
       @pointer
     end
 
