@@ -35,7 +35,6 @@ module V4L2
     # Returns the buffer queue for the stream. Raises an UninitializedError if
     # the buffer queue has not been initialized.
     #
-    @[Raises(RuntimeError)]
     def queue : BufferQueue
       @queue ||
         raise UninitializedError.new("#mmap_buffers or #malloc_buffers has not been called yet")
@@ -45,7 +44,6 @@ module V4L2
     # Returns the allocated buffers for the stream. Raises an UninitializedError
     # if the buffers have not been allocated.
     #
-    @[Raises(RuntimeError)]
     def buffers : Array(AllocatedBuffer)
       @buffers ||
         raise UninitializedError.new("#mmap_buffers or #malloc_buffers has not been called yet")
@@ -107,7 +105,6 @@ module V4L2
     # Requests buffers for the stream, of the given memory type, count, and
     # optional capability.
     #
-    @[Raises(NotImplementedError, ArgumentError)]
     private def request_buffers!(memory : Buffer::Memory, count : UInt32, capability : Buffer::Cap? = nil) : self
       case memory
       when Buffer::Memory::MMAP, Buffer::Memory::USER_PTR

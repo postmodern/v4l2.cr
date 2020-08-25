@@ -96,7 +96,6 @@ module V4L2
         @struct.fmt.pix_mp.plane_fmt[0,@struct.fmt.pix_mp.num_planes]
       end
 
-      @[Raises(NotImplementedError)]
       def planes=(new_planes)
         raise NotImplementedError.new("#{self.class}#planes= not yet implemented")
       end
@@ -132,12 +131,10 @@ module V4L2
         @struct.fmt.win.chromakey
       end
 
-      @[Raises(NotImplementedError)]
       def clips
         raise NotImplementedError.new("#{self.class}#clips not yet implemented")
       end
 
-      @[Raises(NotImplementedError)]
       def bitmap
         raise NotImplementedError.new("#{self.class}#bitmap not yet implemented")
       end

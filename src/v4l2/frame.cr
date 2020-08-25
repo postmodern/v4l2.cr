@@ -40,7 +40,6 @@ module V4L2
     #
     # Fetches a byte within the video frame.
     #
-    @[Raises(IndexError)]
     def unsafe_fetch(index : Int) : UInt8
       if index < 0
         raise IndexError.new

@@ -59,7 +59,6 @@ module V4L2
       @pointer.value.m.offset
     end
 
-    @[Raises(RuntimeError)]
     def user_pointer : Pointer(UInt8)
       unless memory == Memory::USER_PTR
         raise "cannot call #user_pointer when memory type is #{memory}"
@@ -68,12 +67,10 @@ module V4L2
       Pointer(UInt8).new(@pointer.value.m.userptr)
     end
 
-    @[Raises(NotImplementedError)]
     def planes
       raise NotImplementedError.new("#planes currently not implemented")
     end
 
-    @[Raises(RuntimeError)]
     def fd : Int32
       unless (type.is_multiplanar? && memory == Memory::DMABUF)
         raise "#fd can only been called when #{type} is multi-planar and memory is #{Memory::DMABUF}"

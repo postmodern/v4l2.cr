@@ -107,7 +107,6 @@ module V4L2
           #
           # The `{{ buffer_type.id }}` stream.
           #
-          @[Raises(UnsupportedCapability)]
           def {{ buffer_type.id.downcase }}
             @{{ buffer_type.id.downcase }} || \
               raise UnsupportedCapability.new("#{Capability::Cap::{{ buffer_type.id }}} not supported by the device")
@@ -121,7 +120,6 @@ module V4L2
     #
     #     V4L2::Device.open("/dev/video0")
     #
-    @[Raises(OpenFailed)]
     def self.open(path) : Device
       if (fd = LibC.open(path, LibC::O_RDWR | LibC::O_NONBLOCK, 0)) == -1
         raise OpenFailed.new(path)
@@ -147,7 +145,6 @@ module V4L2
     # Queries the V4L2 device capabilities into the Linux::V4L2Capability struct
     # pointer.
     #
-    @[Raises(VIDIOCError)]
     private def query_cap(capability_ptr : Linux::V4L2Capability *)
       if ioctl_blocking(@fd, Linux::VIDIOC_QUERYCAP, capability_ptr) == -1
         raise VIDIOCError.new("VIDIOC_QUERYCAP")
@@ -167,7 +164,6 @@ module V4L2
     #
     # Enumerates the supported formats for the buffer type.
     #
-    @[Raises(VIDIOCError)]
     protected def each_format(type : Buffer::Type, &blocl : (FmtDesc) ->)
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-enum-fmt.html#ioctl-vidioc-enum-fmt
       fmt_desc_struct = Linux::V4L2FmtDesc.new
@@ -214,7 +210,6 @@ module V4L2
     #
     # Sets the format using the given Linux::V4L2Format struct pointer.
     #
-    @[Raises(VIDIOCError)]
     private def set_format(new_format : Linux::V4L2Format *)
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-g-fmt.html#ioctl-vidioc-g-fmt-vidioc-s-fmt-vidioc-try-fmt
       if ioctl_blocking(@fd, Linux::VIDIOC_S_FMT, new_format) == -1
@@ -236,7 +231,6 @@ module V4L2
     #
     # Enumerates over each supported frame size for the given Linux::V4L2PixFmt.
     #
-    @[Raises(VIDIOCError)]
     protected def each_frame_size(pixel_format : PixFmt, &block : (FrameSizes::Discrete | FrameSizes::Stepwise) ->)
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-enum-framesizes.html
       frame_size_enum_struct = Linux::V4L2FrmSizeEnum.new
@@ -266,7 +260,6 @@ module V4L2
     # Requests buffers of the given buffer type, memory type, count, and
     # optionally capability.
     #
-    @[Raises(VIDIOCError)]
     protected def request_buffers(type : Buffer::Type, memory : Buffer::Memory, count : UInt32, capability : Buffer::Cap? = nil)
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-reqbufs.html#ioctl-vidioc-reqbufs
       request_buffers_struct = Linux::V4L2RequestBuffers.new
@@ -293,7 +286,6 @@ module V4L2
     # Queries a buffer using the partially populated Linux::V4L2Buffer struct
     # pointer.
     #
-    @[Raises(IndexError, VIDIOCError)]
     private def query_buffer(buffer_ptr : Linux::V4L2Buffer *)
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-querybuf.html#ioctl-vidioc-querybuf
       if ioctl_blocking(@fd, Linux::VIDIOC_QUERYBUF, buffer_ptr) == -1
@@ -318,7 +310,6 @@ module V4L2
     #
     # Enqueues the given Linux::V4L2Buffer struct pointer.
     #
-    @[Raises(VIDIOCError)]
     private def enqueue_buffer(buffer_ptr : Linux::V4L2Buffer *)
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-qbuf.html#ioctl-vidioc-qbuf-vidioc-dqbuf
       if ioctl_blocking(@fd, Linux::VIDIOC_QBUF, buffer_ptr) == -1
@@ -357,7 +348,6 @@ module V4L2
     # buffer. Returns `false` when no buffer has been dequeued/yielded,
     # otherwise returns `true`.
     #
-    @[Raises(VIDIOCError)]
     protected def dequeue_buffer(type : Buffer::Type, memory : Buffer::Memory, &block : (Buffer) ->) : Bool
       buffer_struct = Linux::V4L2Buffer.new
       buffer_struct.type   = type
@@ -383,7 +373,6 @@ module V4L2
     # Exports a buffer of the given buffer type and index. Returns a file
     # descriptor for the exported buffer.
     #
-    @[Raises(VIDIOCError)]
     protected def export_buffer(type : Buffer::Type, index : UInt32) : Int32
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-expbuf.html#ioctl-vidioc-expbuf
 
@@ -402,7 +391,6 @@ module V4L2
     # Exports a buffer of the given type, index, and plane index. Returns a
     # file descriptor for the exported buffer.
     #
-    @[Raises(VIDIOCError)]
     protected def export_buffer(type : Buffer::Type, index : UInt32, plane : UInt32) : Int32
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-expbuf.html#ioctl-vidioc-expbuf
 
@@ -435,7 +423,6 @@ module V4L2
     #
     # Sets the current frame buffer.
     #
-    @[Raises(VIDIOCError)]
     def frame_buffer=(new_fb)
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-g-fbuf.html#ioctl-vidioc-g-fbuf-vidioc-s-fbuf
       if ioctl_blocking(@fd, Linux::VIDIOC_S_FBUF, pointerof(new_fb)) == -1
@@ -448,7 +435,6 @@ module V4L2
     #
     # Starts or stops video overlay I/O.
     #
-    @[Raises(VIDIOCError)]
     def overlay=(start_or_stop : Bool) : Bool
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-overlay.html#ioctl-vidioc-overlay
       int : Int32 = if start_or_stop; 1
@@ -465,7 +451,6 @@ module V4L2
     #
     # Starts the stream associated with the given buffer type.
     #
-    @[Raises(VIDIOCError)]
     protected def stream_on!(type : Buffer::Type)
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-streamon.html#ioctl-vidioc-streamon-vidioc-streamoff
       if ioctl_blocking(@fd, Linux::VIDIOC_STREAMON, pointerof(type)) == -1
@@ -476,7 +461,6 @@ module V4L2
     #
     # Stops the stream associated with the given buffer type.
     #
-    @[Raises(VIDIOCError)]
     protected def stream_off!(type : Buffer::Type)
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-streamon.html#ioctl-vidioc-streamon-vidioc-streamoff
       if ioctl_blocking(@fd, Linux::VIDIOC_STREAMON, pointerof(type)) == -1
@@ -488,7 +472,6 @@ module V4L2
     # Retrieves the streaming paramters, populating the given
     # Linux::V4L2StreamParm struct pointer.
     #
-    @[Raises(VIDIOCError)]
     private def get_parm(parm_ptr : Linux::V4L2StreamParm *)
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-g-parm.html
       if ioctl_blocking(@fd, Linux::VIDIOC_G_PARM, parm_ptr) == -1
@@ -508,7 +491,6 @@ module V4L2
     # Sets the streaming parameters, given the Linux::V4L2StreamParm struct
     # pointer.
     #
-    @[Raises(VIDIOCError)]
     private def set_parm(new_parm : Linux::V4L2StreamParm *)
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-g-parm.html#ioctl-vidioc-g-parm-vidioc-s-parm
       if ioctl_blocking(@fd, Linux::VIDIOC_S_PARM, new_parm) == -1
@@ -519,7 +501,6 @@ module V4L2
     #
     # Sets the streaming parameters.
     #
-    @[Raises(VIDIOCError)]
     protected def set_parm(new_parm : StreamParm)
       set_parm(new_parm.to_unsafe)
     end
@@ -529,7 +510,6 @@ module V4L2
     #
     # Queries the current video standard.
     #
-    @[Raises(VIDIOCError, VIDIOCError)]
     def standard : StandardID
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-g-std.html#ioctl-vidioc-g-std-vidioc-s-std
       std_id = StandardID.new(0)
@@ -549,7 +529,6 @@ module V4L2
     #
     # Sets the current video standard.
     #
-    @[Raises(VIDIOCError)]
     def standard=(new_std_id : StandardID)
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-g-std.html#ioctl-vidioc-g-std-vidioc-s-std
       if ioctl_blocking(@fd, Linux::VIDIOC_S_STD, pointerof(new_std_id)) == -1
@@ -568,7 +547,6 @@ module V4L2
     # Enumerates over the supported video standards for the V4L2 device,
     # yielding each Standard object.
     #
-    @[Raises(VIDIOCError, VIDIOCError)]
     def each_standard : self
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-enumstd.html#ioctl-vidioc-enumstd
       standard_struct = Linux::V4L2Standard.new
@@ -598,7 +576,6 @@ module V4L2
     #
     # Queries the video input number.
     #
-    @[Raises(VIDIOCError)]
     def input : Int32
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-g-input.html
       int = LibC::Int.new(0)
@@ -613,7 +590,6 @@ module V4L2
     #
     # Sets the video input number.
     #
-    @[Raises(VIDIOCError)]
     def input=(new_input : Int32) : Int32
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-g-input.html
       int = new_input.as(LibC::Int)
@@ -628,7 +604,6 @@ module V4L2
     #
     # Enumerates over the video inputs, yielding each Input object.
     #
-    @[Raises(VIDIOCError)]
     def each_input : self
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-enuminput.html
       input_struct = Linux::V4L2Input.new
@@ -654,7 +629,6 @@ module V4L2
     end
 
     # :nodoc:
-    @[Raises(VIDIOCError, VIDIOCError)]
     def edid(pad : UInt32, start_block : UInt32, blocks : UInt32) : Linux::V4L2EDID
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-g-edid.html
       edid_struct = Linux::V4L2EDID.new
@@ -675,7 +649,6 @@ module V4L2
     end
 
     # :nodoc:
-    @[Raises(VIDIOCError, VIDIOCError)]
     def edid=(args : NamedTuple(pad: UInt32, blocks: UInt32, edid: Bytes))
       edid_struct = Linux::V4L2EDID.new
       edid_struct.pad         = args[:pad]
@@ -699,7 +672,6 @@ module V4L2
     #
     # Queries the current video output number.
     #
-    @[Raises(VIDIOCError)]
     def output : LibC::Int
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-g-output.html
       int = LibC::Int.new(0)
@@ -739,7 +711,6 @@ module V4L2
     # Enumerates over the video outputs supported by the V4L2 device, yielding
     # each Output object.
     #
-    @[Raises(VIDIOCError)]
     def each_output : self
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-enumoutput.html
       output_struct = Linux::V4L2Output.new
@@ -768,7 +739,6 @@ module V4L2
     # Queries the current audio input, populating the Linux::V4L2Audio struct
     # pointer.
     #
-    @[Raises(VIDIOCError)]
     private def get_audio(audio_ptr : Linux::V4L2Audio *)
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-g-audio.html
       if ioctl_blocking(@fd, Linux::VIDIOC_G_AUDIO, audio_ptr) == -1
@@ -795,7 +765,6 @@ module V4L2
     # Sets the current audio input using the given Linux::V4L2Audio struct
     # pointer.
     #
-    @[Raises(VIDIOCError)]
     private def set_audio(audio_ptr : Linux::V4L2Audio *)
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-g-audio.html
       if ioctl_blocking(@fd, Linux::VIDIOC_S_AUDIO, audio_ptr) == -1
@@ -820,7 +789,6 @@ module V4L2
     # Enumerates over each audio input supported by the V4L2 device, yielding
     # each Audio object.
     #
-    @[Raises(VIDIOCError)]
     def each_audio : self
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-enumaudio.html
       audio_struct = Linux::V4L2Audio.new
@@ -849,7 +817,6 @@ module V4L2
     # Enumerates over each audio output supported by the V4L2 device, yielding
     # each AudioOut object.
     #
-    @[Raises(VIDIOCError)]
     def each_audio_out : self
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-enumaudioout.html
       audio_out_struct = Linux::V4L2AudioOut.new
@@ -878,7 +845,6 @@ module V4L2
     # Queries the current modulator, populating the given Linux::V4L2Modulator
     # struct pointer.
     #
-    @[Raises(VIDIOCError, IndexError)]
     private def get_modulator(modulator_ptr : Linux::V4L2Modulator *)
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-g-modulator.html
       if ioctl_blocking(@fd, Linux::VIDIOC_G_MODULATOR, modulator_ptr) == -1
@@ -905,7 +871,6 @@ module V4L2
     #
     # Sets the current modulator using the Linux::V4L2Modulator struct pointer.
     #
-    @[Raises(VIDIOCError)]
     private def set_modulator(modulator_ptr : Linux::V4L2Modulator *)
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-g-modulator.html
       if ioctl_blocking(@fd, Linux::VIDIOC_S_MODULATOR, modulator_ptr) == -1
@@ -930,7 +895,6 @@ module V4L2
     # Queries the current tuner or modulator radio frequency, populating the
     # given Linux::V4L2Frequency struct pointer.
     #
-    @[Raises(VIDIOCError)]
     private def get_frequency(frequency_ptr : Linux::V4L2Frequency *)
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-g-frequency.html
       if ioctl_blocking(@fd, Linux::VIDIOC_G_FREQUENCY, frequency_ptr) == -1
@@ -958,7 +922,6 @@ module V4L2
     # Sets the current tuner or modulator frequency, using the
     # Linux::V4L2Frequency struct pointer.
     #
-    @[Raises(VIDIOCError)]
     private def set_frequency(frequency_ptr : Linux::V4L2Frequency *)
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-g-frequency.html
       if ioctl_blocking(@fd, Linux::VIDIOC_S_FREQUENCY, frequency_ptr) == -1
@@ -985,7 +948,6 @@ module V4L2
     # Queries the V4L2 device's supported cropping capabilities, populating the
     # Linux::V4L2CropCap struct pointer.
     #
-    @[Raises(VIDIOCError)]
     private def crop_capabilities(crop_cap_ptr : Linux::V4L2CropCap *)
       # See https://linuxtv.org/downloads/v4l-dvb-apis-new/uapi/v4l/vidioc-cropcap.html#c.VIDIOC_CROPCAP
       if ioctl_blocking(@fd, Linux::VIDIOC_CROPCAP, crop_cap_ptr) == -1
@@ -1009,7 +971,6 @@ module V4L2
     # Retrieves the current set crop, populating the Linux::V4L2Crop struct
     # pointer.
     #
-    @[Raises(VIDIOCError)]
     private def get_crop(crop_ptr : Linux::V4L2Crop *)
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-g-crop.html#vidioc-g-crop
       if ioctl_blocking(@fd, Linux::VIDIOC_G_CROP, crop_ptr) == -1
@@ -1031,7 +992,6 @@ module V4L2
     #
     # Sets the current crop, using the Linux::V4L2Crop struct pointer.
     #
-    @[Raises(VIDIOCError)]
     private def set_crop(new_crop_ptr : Linux::V4L2Crop *)
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-g-crop.html
       if ioctl_blocking(@fd, Linux::VIDIOC_S_CROP, new_crop_ptr) == -1
@@ -1050,7 +1010,6 @@ module V4L2
     # Attempts to change the current format of the V4L2 device, but does not
     # actually change the current format.
     #
-    @[Raises(VIDIOCError)]
     private def try_format(format_ptr : Linux::V4L2Format *) : Bool
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-g-fmt.html
       if ioctl_blocking(@fd, Linux::VIDIOC_TRY_FMT, format_ptr) == -1
@@ -1073,7 +1032,6 @@ module V4L2
     #
     # Queries the access priority of the V4L2 device.
     #
-    @[Raises(VIDIOCError)]
     def priority : Priority
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-g-priority.html
       priority = Priority.new(0)
@@ -1088,7 +1046,6 @@ module V4L2
     #
     # Sets the access priority of the device.
     #
-    @[Raises(VIDIOCError)]
     def priority=(new_priority : Priority) : Priority
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-g-priority.html
       if ioctl_blocking(@fd, Linux::VIDIOC_S_PRIORITY, pointerof(new_priority)) == -1
@@ -1099,7 +1056,6 @@ module V4L2
     end
 
     # :nodoc:
-    @[Raises(VIDIOCError)]
     def sliced_vbi_capabilities(type : Buffer::Type)
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-g-sliced-vbi-cap.html
       sliced_vbi_cap_struct = Linux::V4L2SlicedVBICap.new
@@ -1117,7 +1073,6 @@ module V4L2
     # Note: This ioctl is optional and not all drivers support it. It was
     # introduced in Linux 2.6.15.
     #
-    @[Raises(VIDIOCError)]
     def log_status
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-log-status.html
       if ioctl_blocking(@fd, Linux::VIDIOC_LOG_STATUS) == -1
@@ -1151,7 +1106,6 @@ module V4L2
     # the number of bytes read. If no data is currently available, this
     # method will wait.
     #
-    @[Raises(UnsupportedError)]
     def read(buffer : Slice(UInt8)) : Int32
       wait_readable
 
@@ -1165,7 +1119,6 @@ module V4L2
     #
     # Writes data directly to the V4L2 device's file descriptor.
     #
-    @[Raises(UnsupportedError)]
     def write(buffer : Slice(UInt8))
       unless @capability.capabilities.includes?(Capability::Cap::READWRITE)
         raise UnsupportedCapability.new("writing directly from the device is not supported")

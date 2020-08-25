@@ -31,7 +31,6 @@ module V4L2
       end
     end
 
-    @[Raises(IndexError)]
     def enqueue(buffer : Buffer)
       @device.enqueue_buffer(buffer)
     end
