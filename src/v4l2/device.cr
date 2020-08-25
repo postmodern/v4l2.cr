@@ -31,7 +31,7 @@ module V4L2
     #
     class OpenFailed < Error
 
-      def initialize(path)
+      def initialize(path : String)
         super("#{Error.strerror}: #{path}")
       end
 
@@ -42,7 +42,7 @@ module V4L2
     #
     class VIDIOCError < Error
 
-      def initialize(ioctl, message = Error.strerror)
+      def initialize(ioctl : String, message = Error.strerror)
         super("#{ioctl}: #{message}")
       end
 
