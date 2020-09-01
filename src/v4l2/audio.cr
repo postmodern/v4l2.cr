@@ -1,5 +1,9 @@
+require "./struct_wrapper"
+
 module V4L2
   class Audio
+
+    include StructWrapper(Linux::V4L2Audio)
 
     def initialize
       @struct = Linux::V4L2Audio.new
@@ -8,19 +12,10 @@ module V4L2
     def initialize(@struct : Linux::V4L2Audio)
     end
 
-    delegate index, to: @struct
-
-    def name : String
-      String.new(@struct.name.to_slice)
-    end
-
-    delegate capability, to: @struct
-
-    delegate mode, to: @struct
-
-    def to_unsafe : Pointer(Linux::V4L2Audio)
-      pointerof(@struct)
-    end
+    struct_getter index
+    struct_char_array_field name
+    struct_getter capability
+    struct_getter mode
 
   end
 end

@@ -1,11 +1,12 @@
 require "../linux/videodev2"
+require "./struct_wrapper"
 require "./buffer"
 require "./rect"
 
 module V4L2
   class Crop
 
-    @struct : Linux::V4L2Crop
+    include StructWrapper(Linux::V4L2Crop)
 
     def initialize(type : Buffer::Type)
       @struct = Linux::V4L2Crop.new
@@ -20,10 +21,6 @@ module V4L2
 
     def rect : Rect
       Rect.new(@struct.c)
-    end
-
-    def to_unsafe : Pointer(Linux::V4L2Crop)
-      pointerof(@struct)
     end
 
   end

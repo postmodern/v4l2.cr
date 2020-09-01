@@ -6,12 +6,14 @@ require "./fract"
 module V4L2
   class CropCapability
 
+    include StructWrapper(Linux::V4L2CropCap)
+
     def initialize(type : Buffer::Type)
       @struct = Linux::V4L2CropCap.new
       @struct.type = type
     end
 
-    delegate type, to: @struct
+    struct_getter type
 
     def bounds : Rect
       Rect.new(@struct.bounds)
@@ -25,14 +27,7 @@ module V4L2
       Fract.new(@struct.pixelaspect)
     end
 
-    @[AlwaysInline]
-    def pixel_aspect
-      pixelaspect
-    end
-
-    def to_unsafe : Pointer(Linux::V4L2CropCap)
-      pointerof(@struct)
-    end
+    struct_getter pixel_aspect, field: pixelaspect
 
   end
 end

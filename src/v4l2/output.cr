@@ -1,33 +1,21 @@
+require "../linux/videodev2"
+require "./struct_wrapper"
+
 module V4L2
   class Output
+
+    include StructWrapper(Linux::V4L2Output)
 
     def initialize(@struct : Linux::V4L2Output)
     end
 
-    delegate index, to: @struct
-
-    def name : String
-      String.new(@struct.name.to_slice)
-    end
-
-    delegate type, to: @struct
-
-    delegate audioset, to: @struct
-
-    delegate modulator, to: @struct
-
-    delegate std, to: @struct
-
-    @[AlwaysInline]
-    def standard
-      std
-    end
-
-    delegate capabilities, to: @struct
-
-    def to_unsafe : Pointer(Linux::V4L2Output)
-      pointerof(@struct)
-    end
+    struct_getter index
+    struct_char_array_field name
+    struct_getter type
+    struct_getter audioset
+    struct_getter modulator
+    struct_getter standard, field: std
+    struct_getter capabilities
 
   end
 end

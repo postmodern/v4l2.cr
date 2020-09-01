@@ -1,7 +1,10 @@
 require "../linux/videodev2"
+require "./struct_wrapper"
 
 module V4L2
   class Format
+
+    include StructWrapper(Linux::V4L2Format)
 
     def initialize(type : Buffer::Type)
       @struct = Linux::V4L2Format.new
@@ -14,62 +17,25 @@ module V4L2
       yield self
     end
 
-    delegate type, to: @struct
-
-    def to_unsafe : Pointer(Linux::V4L2Format)
-      pointerof(@struct)
-    end
+    struct_getter type
 
     class Pix < Format
 
-      delegate width, to: @struct.fmt.pix
-      delegate :width=, to: @struct.fmt.pix
+      struct_property width, to: @struct.fmt.pix
+      struct_property height, to: @struct.fmt.pix
+      struct_property pixel_format, field: pixelformat, to: @struct.fmt.pix
 
-      delegate height, to: @struct.fmt.pix
-      delegate :height=, to: @struct.fmt.pix
+      struct_getter field, to: @struct.fmt.pix
+      struct_getter bytes_per_line, field: bytesperline, to: @struct.fmt.pix
+      struct_getter size_image, field: sizeimage, to: @struct.fmt.pix
 
-      delegate pixelformat, to: @struct.fmt.pix
-      delegate :pixelformat=, to: @struct.fmt.pix
+      struct_getter color_space, field: colorspace, to: @struct.fmt.pix
+      struct_getter flags, to: @struct.fmt.pix
 
-      def pixel_format
-        @struct.fmt.pix.pixelformat
-      end
+      struct_getter ycbcr, to: @struct.fmt.pix.enc
+      struct_getter hsv, to: @struct.fmt.pix.enc
 
-      def pixel_format=(new_pix_format)
-        @struct.fmt.pix.pixelformat = new_pix_format
-      end
-
-      delegate field, to: @struct.fmt.pix
-
-      delegate bytesperline, to: @struct.fmt.pix
-
-      def bytes_per_line
-        @struct.fmt.pix.bytesperline
-      end
-
-      delegate sizeimage, to: @struct.fmt.pix
-
-      def size_image
-        @struct.fmt.pix.sizeimage
-      end
-
-      delegate colorspace, to: @struct.fmt.pix
-
-      def color_space
-        @struct.fmt.pix.colorspace
-      end
-
-      delegate flags, to: @struct.fmt.pix
-
-      def ycbcr
-        @struct.fmt.pix.enc.ycbcr
-      end
-
-      def hsv
-        @struct.fmt.pix.enc.hsv
-      end
-
-      delegate quality, to: @struct.fmt.pix
+      struct_getter quality, to: @struct.fmt.pix
 
       def xfer_func
         Linux::V4L2XFERFunc.new(@struct.fmt.pix.xfer_func)
@@ -79,18 +45,11 @@ module V4L2
 
     class PixMPlane < Format
 
-      delegate width, to: @struct.fmt.pix_mp
-      delegate height, to: @struct.fmt.pix_mp
-
-      delegate pixelformat, to: @struct.fmt.pix_mp
-
-      def pixel_format
-        @struct.fmt.pix_mp.pixelformat
-      end
-
-      delegate field, to: @struct.fmt.pix_mp
-
-      delegate colorspace, to: @struct.fmt.pix_mp
+      struct_getter width, to: @struct.fmt.pix_mp
+      struct_getter height, to: @struct.fmt.pix_mp
+      struct_getter pixel_format, field: pixelformat, to: @struct.fmt.pix_mp
+      struct_getter field, to: @struct.fmt.pix_mp
+      struct_getter color_space, field: colorspace, to: @struct.fmt.pix_mp
 
       def planes
         @struct.fmt.pix_mp.plane_fmt[0,@struct.fmt.pix_mp.num_planes]
@@ -100,36 +59,23 @@ module V4L2
         raise NotImplementedError.new("#{self.class}#planes= not yet implemented")
       end
 
-      def color_space
-        @struct.fmt.pix_mp.colorspace
-      end
+      struct_getter ycbcr, field: ycbcr_enc, to: @struct.fmt.pix_mp
+      struct_getter hsv, field: hsv_enc, to: @struct.fmt.pix_mp
 
-      def ycbcr
-        @struct.fmt.pix_mp.enc.ycbcr_enc
-      end
-
-      def hsv
-        @struct.fmt.pix_mp.enc.hsv_enc
-      end
-
-      delegate xfer_func, to: @struct.fmt.pix_mp
+      struct_getter xfer_func, to: @struct.fmt.pix_mp
 
     end
 
     class Window < Format
 
-      delegate left, to: @struct.fmt.win.w
-      delegate top, to: @struct.fmt.win.w
-      delegate width, to: @struct.fmt.win.w
-      delegate height, to: @struct.fmt.win.w
+      struct_getter left, to: @struct.fmt.win.w
+      struct_getter top, to: @struct.fmt.win.w
+      struct_getter width, to: @struct.fmt.win.w
+      struct_getter height, to: @struct.fmt.win.w
 
-      delegate field, to: @struct.fmt.win
+      struct_getter field, to: @struct.fmt.win
 
-      delegate chromakey, to: @struct.fmt.win
-
-      def chroma_key
-        @struct.fmt.win.chromakey
-      end
+      struct_getter chroma_key, field: chromakey, to: @struct.fmt.win
 
       def clips
         raise NotImplementedError.new("#{self.class}#clips not yet implemented")
@@ -145,53 +91,35 @@ module V4L2
 
       alias Flags = Linux::V4L2VBIFlags
 
-      delegate sampling_rate, to: @struct.fmt.vbi
-      delegate offset, to: @struct.fmt.vbi
-      delegate samples_per_line, to: @struct.fmt.vbi
-      delegate sample_format, to: @struct.fmt.vbi
-      delegate start, to: @struct.fmt.vbi
-      delegate count, to: @struct.fmt.vbi
-      delegate flags, to: @struct.fmt.vbi
+      struct_getter sampling_rate, to: @struct.fmt.vbi
+      struct_getter offset, to: @struct.fmt.vbi
+      struct_getter samples_per_line, to: @struct.fmt.vbi
+      struct_getter sample_format, to: @struct.fmt.vbi
+      struct_getter start, to: @struct.fmt.vbi
+      struct_getter count, to: @struct.fmt.vbi
+      struct_getter flags, to: @struct.fmt.vbi
 
     end
 
     class SlicedVBI < Format
 
-      delegate service_set, to: @struct.fmt.sliced_vbi
-      delegate service_lines, to: @struct.fmt.sliced_vbi
-      delegate io_size, to: @struct.fmt.sliced_vbi
+      struct_getter service_set, to: @struct.fmt.sliced_vbi
+      struct_getter service_lines, to: @struct.fmt.sliced_vbi
+      struct_getter io_size, to: @struct.fmt.sliced_vbi
 
     end
 
     class SDR < Format
 
-      delegate pixelformat, to: @struct.fmt.sdr
-
-      def pixel_format
-        @struct.fmt.sdr.pixelformat
-      end
-
-      delegate buffersize, to: @struct.fmt.sdr
-
-      def buffer_size
-        @struct.fmt.sdr.buffersize
-      end
+      struct_getter pixel_format, field: pixelformat, to: @struct.fmt.sdr
+      struct_getter buffer_size, field: buffersize, to: @struct.fmt.sdr
 
     end
 
     class Meta < Format
 
-      delegate dataformat, to: @struct.fmt.meta
-
-      def data_format
-        @struct.fmt.meta.dataformat
-      end
-
-      delegate buffersize, to: @struct.fmt.meta
-
-      def buffer_size
-        @struct.fmt.meta.buffersize
-      end
+      struct_getter data_format, field: dataformat, to: @struct.fmt.meta
+      struct_getter buffer_size, field: buffersize, to: @struct.fmt.meta
 
     end
 

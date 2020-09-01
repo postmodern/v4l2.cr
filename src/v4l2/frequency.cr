@@ -1,7 +1,10 @@
 require "../linux/videodev2"
+require "./struct_wrapper"
 
 module V4L2
   class Frequency
+
+    include StructWrapper(Linux::V4L2Frequency)
 
     def initialize(tuner : UInt32)
       @struct = Linux::V4L2Frequency.new
@@ -11,17 +14,13 @@ module V4L2
     def initialize(@struct : Linux::V4L2Frequency)
     end
 
-    delegate tuner, to: @struct
-    delegate type, to: @struct
-    delegate frequency, to: @struct
+    struct_getter tuner
+    struct_getter type
+    struct_getter frequency
 
     @[AlwaysInline]
     def to_u32
       frequency
-    end
-
-    def to_unsafe : Pointer(Linux::V4L2Frequency)
-      pointerof(@struct)
     end
 
   end

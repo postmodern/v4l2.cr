@@ -1,7 +1,10 @@
 require "../linux/videodev2"
+require "./struct_wrapper"
 
 module V4L2
   class Capability
+
+    include StructWrapper(Linux::V4L2Capability)
 
     alias Cap = Linux::V4L2Cap
 
@@ -9,9 +12,8 @@ module V4L2
       @struct = Linux::V4L2Capability.new
     end
 
-    delegate version, to: @struct
-
-    delegate capabilities, to: @struct
+    struct_getter version
+    struct_getter capabilities
 
     {% for cap in Cap.constants %}
       {% begin %}
@@ -22,23 +24,14 @@ module V4L2
       {% end %}
     {% end %}
 
-    def driver : String
-      String.new(@struct.driver.to_slice)
-    end
-
-    def card : String
-      String.new(@struct.card.to_slice)
-    end
+    struct_char_array_field driver
+    struct_char_array_field card
 
     def device_caps?
-      @struct.capabilities.includes?(Linux::V4L2Cap::DEVICE_CAPS)
+      capabilities.includes?(Linux::V4L2Cap::DEVICE_CAPS)
     end
 
-    delegate device_caps, to: @struct
-
-    def to_unsafe : Pointer(Linux::V4L2Capability)
-      pointerof(@struct)
-    end
+    struct_getter device_caps
 
   end
 end

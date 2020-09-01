@@ -4,16 +4,14 @@ require "./fract"
 module V4L2
   class StreamParm
 
+    include StructWrapper(Linux::V4L2StreamParm)
+
     def initialize(type : Buffer::Type)
       @struct = Linux::V4L2StreamParm.new
       @struct.type = type
     end
 
-    delegate type, to: @struct
-
-    def to_unsafe : Pointer(Linux::V4L2StreamParm)
-      pointerof(@struct)
-    end
+    struct_getter type
 
     class Capture < StreamParm
 
@@ -27,11 +25,8 @@ module V4L2
         yield self
       end
 
-      delegate capability, to: @struct.parm.capture
-      delegate :capability=, to: @struct.parm.capture
-
-      delegate capture_mode, to: @struct.parm.capture
-      delegate :capture_mode=, to: @struct.parm.capture
+      struct_property capability, to: @struct.parm.capture
+      struct_property capture_mode, to: @struct.parm.capture
 
       def time_per_frame : Fract
         Fract.new(@struct.parm.capture.timeperframe)
@@ -41,11 +36,8 @@ module V4L2
         @struct.parm.capture.timeperframe = new_fract.to_unsafe
       end
 
-      delegate extended_mode, to: @struct.parm.capture
-      delegate :extended_mode=, to: @struct.parm.capture
-
-      delegate read_buffers, to: @struct.parm.capture
-      delegate :read_buffers=, to: @struct.parm.capture
+      struct_property extended_mode, to: @struct.parm.capture
+      struct_property read_buffers, to: @struct.parm.capture
 
     end
 
@@ -61,11 +53,8 @@ module V4L2
         yield self
       end
 
-      delegate capability, to: @struct.parm.output
-      delegate :capability=, to: @struct.parm.output
-
-      delegate capture_mode, to: @struct.parm.output
-      delegate :capture_mode=, to: @struct.parm.output
+      struct_property capability, to: @struct.parm.output
+      struct_property capture_mode, to: @struct.parm.output
 
       def time_per_frame : Fract
         Fract.new(@struct.parm.output.timeperframe)
@@ -75,11 +64,8 @@ module V4L2
         @struct.parm.output.timeperframe = new_fract.to_unsafe
       end
 
-      delegate extended_mode, to: @struct.parm.output
-      delegate :extended_mode=, to: @struct.parm.output
-
-      delegate read_buffers, to: @struct.parm.output
-      delegate :read_buffers=, to: @struct.parm.output
+      struct_property extended_mode, to: @struct.parm.output
+      struct_property read_buffers, to: @struct.parm.output
 
     end
 
