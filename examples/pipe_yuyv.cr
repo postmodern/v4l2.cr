@@ -22,8 +22,6 @@ begin
         format.pixel_format = V4L2::PixFmt::YUYV
       end
 
-      dummy = Bytes.new(format.size_image)
-
       input.video_capture.malloc_buffers!(4, format.size_image)
       input.video_capture.capture! do
         system "ffplay #{output_dev} &"
