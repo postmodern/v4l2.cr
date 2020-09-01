@@ -33,7 +33,7 @@ module V4L2
     #
     # Returns the size of the video frame.
     #
-    def size : UInt32
+    def size : Int32
       @data.size
     end
 
