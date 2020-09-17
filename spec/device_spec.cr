@@ -25,8 +25,8 @@ Spectator.describe V4L2::Device do
     end
 
     context "when the video device does not support VIDEO_CAPTURE" do
-      it "must raise an V4L2::Device::UnsupportedCapability exception" do
-        #pending "figure out how to test this edge-case"
+      xit "must raise an V4L2::Device::UnsupportedCapability exception" do
+        expect { subject.video_capture }.to raise_error(V4L2::Device::UnsupportedCapability)
       end
     end
   end
@@ -41,17 +41,17 @@ Spectator.describe V4L2::Device do
     end
 
     context "when the video device does not support VIDEO_OUTPUT" do
-      it "must raise an V4L2::Device::UnsupportedCapability exception" do
-        #pending "figure out how to test this edge-case"
+      xit "must raise an V4L2::Device::UnsupportedCapability exception" do
+        expect { subject.video_output }.to raise_error(V4L2::Device::UnsupportedCapability)
       end
     end
   end
 
-  {% for name in [:video_overlay, :vbi_capture, :vbi_output, :sliced_vbi_capture, :sliced_vbi_output, :video_output_overlay, :video_capture_mplane, :video_output_mplane, :sdr_capture, :sdr_output, :meta_capture, :meta_output] %}
+  {% for name, constant in {:video_overlay => :VideoOverlay, :vbi_capture => :VBICapture, :vbi_output => :VBIOutput, :sliced_vbi_capture => :SlicedVBICapture, :sliced_vbi_output => :SlicedVBIOutput, :video_output_overlay => :VideoOutputOverlay, :video_capture_mplane => :VideoCaptureMPlane, :video_output_mplane => :VideoOutputMPlane, :sdr_capture => :SDRCapture, :sdr_output => :SDROutput, :meta_capture => :MetaCapture, :meta_output => :MetaOutput} %}
     describe "#{{ name.id }}" do
       context "when the video device supports {{ name.id.upcase }}" do
-        it "should initialize \# {{ name.id }}" do
-          #pending "figure out how to test this edge-case"
+        xit "should initialize \#{{ name.id }}" do
+          expect(subject.{{ name.id }}).to be_kind_of(V4L2::Streams::{{ constant.id }})
         end
       end
 
