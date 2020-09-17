@@ -47,6 +47,11 @@ end
 
 See [examples] for additional examples.
 
+## Testing
+
+1. `sudo modprobe v4l2lloopback`
+2. `VIDEO_DEV=/dev/videoX crystal spec`
+
 ## TODO
 
 * Document public API.
