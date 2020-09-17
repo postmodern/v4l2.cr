@@ -515,12 +515,7 @@ module V4L2
       std_id = StandardID.new(0)
 
       if ioctl_blocking(@fd, Linux::VIDIOC_G_STD, pointerof(std_id)) == -1
-        case Errno.value
-        when Errno::ENODATA
-          raise VIDIOCError.new
-        else
-          raise VIDIOCError.new("VIDIOC_G_STD")
-        end
+        raise VIDIOCError.new("VIDIOC_G_STD")
       end
 
       return std_id
@@ -532,12 +527,7 @@ module V4L2
     def standard=(new_std_id : StandardID)
       # See https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/vidioc-g-std.html#ioctl-vidioc-g-std-vidioc-s-std
       if ioctl_blocking(@fd, Linux::VIDIOC_S_STD, pointerof(new_std_id)) == -1
-        case Errno.value
-        when Errno::EINVAL
-          raise VIDIOCError.new
-        else
-          raise VIDIOCError.new("VIDIOC_S_STD")
-        end
+        raise VIDIOCError.new("VIDIOC_S_STD")
       end
 
       return new_std_id
@@ -559,8 +549,6 @@ module V4L2
           case Errno.value
           when Errno::EINVAL
             break
-          when Errno::ENODATA
-            raise VIDIOCError.new
           else
             raise VIDIOCError.new("VIDIOC_ENUMSTD")
           end
