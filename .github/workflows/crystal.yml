@@ -13,6 +13,10 @@ jobs:
       image: crystallang/crystal
     steps:
     - uses: actions/checkout@v2
+    - name: Install v4l2loopback
+      run: |
+        apt-get update && \
+        apt-get install --no-install-recommends --no-install-suggests v4l2loopback-dkms v4l2loopback-utils
     - name: Install dependencies
       run: shards install
     - name: Run tests
