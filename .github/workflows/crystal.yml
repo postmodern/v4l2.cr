@@ -16,7 +16,7 @@ jobs:
     - name: Install v4l2loopback
       run: |
         apt-get update && \
-        apt-get install --no-install-recommends --no-install-suggests v4l2loopback-dkms v4l2loopback-utils
+        apt-get install -y --no-install-recommends --no-install-suggests v4l2loopback-dkms v4l2loopback-utils
     - name: Install dependencies
       run: shards install
     - name: Run tests
