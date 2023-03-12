@@ -15,8 +15,8 @@ license: MIT
 
 dependencies:
   ioctl:
-    github: postmodern/ioctl.cr
-    version: ">= 0.1.1 and < 1.0.0"
+    github: crystal-posix/ioctl.cr
+    version: ">= 0.1.1, < 1.0.0"
     # path: ../ioctl.cr
 
 development_dependencies:
